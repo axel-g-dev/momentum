@@ -49,9 +49,7 @@ Le tableau de bord affiche 4 indicateurs clés :
 
 ### Localisation (FR / EN)
 - L'application est **entièrement traduite en français et en anglais**.
-- Le choix de la langue se fait **dans l'app** via Réglages > Préférences > Langue.
-- Trois options : Système (suit la langue de l'iPhone), English, Français.
-- Le changement est instantané, sans redémarrage de l'app.
+- Elle s'adapte automatiquement à la langue système de l'appareil (via `Localizable.xcstrings`).
 
 ---
 
@@ -59,13 +57,13 @@ Le tableau de bord affiche 4 indicateurs clés :
 
 | # | Écran | Description |
 |---|-------|-------------|
-| 1 | **Accueil** | Liste de tous les objectifs avec filtre segmenté (Actifs / Terminés / Archivés), barre de recherche, et bouton "+" pour créer un nouvel objectif. |
-| 2 | **Détail objectif** | Affiche le titre, la description, la date limite, le type de répétition, un cercle de progression animé, le streak, la checklist d'étapes cochables, et un bouton "Fait aujourd'hui" pour les objectifs récurrents. |
-| 3 | **Formulaire** | Création ou édition d'un objectif : nom, description, toggle de date limite avec sélection de date et heure, choix de répétition, et gestion dynamique des étapes. |
-| 4 | **Statistiques** | Dashboard avec 4 cartes de stats (objectifs actifs, terminés, meilleur streak, progression) et liste détaillée des objectifs actifs avec mini-anneaux de progression. |
-| 5 | **Réglages** | Choix de la langue, activation/désactivation des notifications, sélection de l'heure du rappel, version de l'app. |
+| 1 | **Statistiques** | Dashboard avec 4 cartes de stats colorées distinctement (objectifs actifs [orange], terminés [vert], meilleur streak [jaune], progression [bleu]) et liste détaillée des objectifs actifs avec mini-anneaux de progression. |
+| 2 | **Accueil** | Liste de tous les objectifs avec filtre segmenté (Actifs / Terminés / Archivés), barre de recherche, et bouton "+" pour créer un nouvel objectif. |
+| 3 | **Détail objectif** | Affiche le titre, la description, la date limite, le type de répétition, un cercle de progression animé, le streak, la checklist d'étapes cochables, et un bouton "Fait aujourd'hui" pour les objectifs récurrents, avec option de désarchivage si archivé. |
+| 4 | **Formulaire** | Création ou édition d'un objectif : nom, description, toggle de date limite avec sélection de date et heure, rappel spécifique, choix de répétition, et gestion dynamique des étapes. |
+| 5 | **Réglages** | Activation/désactivation des notifications, sélection de l'heure du rappel quotidien, et version de l'app. |
 
-La navigation se fait via une **barre d'onglets (Tab Bar)** en bas de l'écran avec 3 onglets : Accueil, Stats, Réglages.
+La navigation se fait via une **barre d'onglets (Tab Bar)** en bas de l'écran avec 3 onglets ordonnés comme suit : Stats, Accueil, Réglages.
 
 ---
 
