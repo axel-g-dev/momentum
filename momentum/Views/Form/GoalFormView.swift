@@ -102,12 +102,13 @@ struct GoalFormView: View {
 
                 if viewModel.hasDeadlineTime {
                     DatePicker(
-                        String(localized: "form.deadline.time", defaultValue: "Time"),
+                        "",
                         selection: $viewModel.deadline,
                         in: Date.now...,
                         displayedComponents: .hourAndMinute
                     )
-                    .tint(.accentOcean)
+                    .datePickerStyle(.wheel)
+                    .labelsHidden()
                 }
             }
         }
@@ -140,12 +141,13 @@ struct GoalFormView: View {
 
                 if viewModel.hasReminderTime {
                     DatePicker(
-                        String(localized: "form.reminder.time", defaultValue: "Time"),
+                        "",
                         selection: $viewModel.reminderDate,
                         in: Date.now...,
                         displayedComponents: .hourAndMinute
                     )
-                    .tint(.accentOcean)
+                    .datePickerStyle(.wheel)
+                    .labelsHidden()
                 }
             }
         }
