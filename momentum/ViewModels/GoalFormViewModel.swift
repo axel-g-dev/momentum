@@ -1,6 +1,11 @@
 import Foundation
 import SwiftData
 
+struct StepInput: Identifiable, Equatable {
+    let id = UUID()
+    var title: String
+}
+
 @Observable
 final class GoalFormViewModel {
     var title: String = ""
@@ -10,14 +15,14 @@ final class GoalFormViewModel {
     var hasReminder: Bool = false
     var reminderDate: Date = Calendar.current.date(byAdding: .day, value: 1, to: .now) ?? .now
     var repetition: GoalRepetition = .none
-    var stepTitles: [String] = [""]
+    var stepInputs: [StepInput] = [StepInput(title: "")]
 
     var isValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     var nonEmptyStepTitles: [String] {
-        stepTitles.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        stepInputs.map(\.title).filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
     }
 
     func loadGoal(_ goal: Goal) {
@@ -28,19 +33,19 @@ final class GoalFormViewModel {
         hasReminder = goal.reminderDate != nil
         reminderDate = goal.reminderDate ?? Calendar.current.date(byAdding: .day, value: 1, to: .now) ?? .now
         repetition = goal.repetition
-        stepTitles = goal.sortedSteps.map(\.title)
-        if stepTitles.isEmpty {
-            stepTitles = [""]
+        stepInputs = goal.sortedSteps.map { StepInput(title: $0.title) }
+        if stepInputs.isEmpty {
+            stepInputs = [StepInput(title: "")]
         }
     }
 
     func addStep() {
-        stepTitles.append("")
+        stepInputs.append(StepInput(title: ""))
     }
 
     func removeStep(at index: Int) {
-        guard stepTitles.count > 1 else { return }
-        stepTitles.remove(at: index)
+        guard stepInputs.count > 1 else { return }
+        stepInputs.remove(at: index)
     }
 
     func saveNewGoal(context: ModelContext) {

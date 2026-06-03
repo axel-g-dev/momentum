@@ -138,7 +138,8 @@ struct GoalFormView: View {
 
     private var stepsSection: some View {
         Section {
-            ForEach(viewModel.stepTitles.indices, id: \.self) { index in
+            let list = viewModel.stepInputs
+            ForEach(Array(list.enumerated()), id: \.element.id) { index, input in
                 HStack {
                     Image(systemName: "circle")
                         .foregroundStyle(Color(.systemGray3))
@@ -146,11 +147,11 @@ struct GoalFormView: View {
 
                     TextField(
                         String(localized: "form.step.placeholder", defaultValue: "Step \(index + 1)"),
-                        text: $viewModel.stepTitles[index]
+                        text: $viewModel.stepInputs[index].title
                     )
                     .focused($focusedStepIndex, equals: index)
                     .onSubmit {
-                        if index == viewModel.stepTitles.count - 1 {
+                        if index == list.count - 1 {
                             viewModel.addStep()
                             focusedStepIndex = index + 1
                         } else {
@@ -158,7 +159,7 @@ struct GoalFormView: View {
                         }
                     }
 
-                    if viewModel.stepTitles.count > 1 {
+                    if list.count > 1 {
                         Button {
                             withAnimation {
                                 viewModel.removeStep(at: index)
@@ -175,7 +176,7 @@ struct GoalFormView: View {
             Button {
                 withAnimation {
                     viewModel.addStep()
-                    focusedStepIndex = viewModel.stepTitles.count - 1
+                    focusedStepIndex = viewModel.stepInputs.count - 1
                 }
             } label: {
                 Label(
