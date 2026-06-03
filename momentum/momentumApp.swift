@@ -1,20 +1,18 @@
-//
-//  momentumApp.swift
-//  momentum
-//
-//  Created by Axel G on 03/06/2026.
-//
-
 import SwiftUI
 import SwiftData
 
 @main
-struct momentumApp: App {
+struct MomentumApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Goal.self,
+            GoalStep.self,
+            GoalHistory.self,
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false
+        )
 
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
@@ -23,9 +21,12 @@ struct momentumApp: App {
         }
     }()
 
+    @AppStorage("appLanguage") private var appLanguage: String = "system"
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainTabView()
+                .environment(\.locale, appLanguage == "system" ? .current : Locale(identifier: appLanguage))
         }
         .modelContainer(sharedModelContainer)
     }
