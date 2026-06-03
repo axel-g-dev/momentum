@@ -95,20 +95,19 @@ struct GoalFormView: View {
                 .tint(.accentOcean)
 
                 Toggle(
-                    String(localized: "form.time.toggle", defaultValue: "Time"),
+                    String(localized: "form.time.include", defaultValue: "Include specific time"),
                     isOn: $viewModel.hasDeadlineTime.animation()
                 )
                 .tint(.accentOcean)
 
                 if viewModel.hasDeadlineTime {
                     DatePicker(
-                        "",
+                        String(localized: "form.time.picker", defaultValue: "Time"),
                         selection: $viewModel.deadline,
                         in: Date.now...,
                         displayedComponents: .hourAndMinute
                     )
-                    .datePickerStyle(.wheel)
-                    .labelsHidden()
+                    .tint(.accentOcean)
                 }
             }
         }
@@ -134,20 +133,19 @@ struct GoalFormView: View {
                 .tint(.accentOcean)
 
                 Toggle(
-                    String(localized: "form.time.toggle", defaultValue: "Time"),
+                    String(localized: "form.time.include", defaultValue: "Include specific time"),
                     isOn: $viewModel.hasReminderTime.animation()
                 )
                 .tint(.accentOcean)
 
                 if viewModel.hasReminderTime {
                     DatePicker(
-                        "",
+                        String(localized: "form.time.picker", defaultValue: "Time"),
                         selection: $viewModel.reminderDate,
                         in: Date.now...,
                         displayedComponents: .hourAndMinute
                     )
-                    .datePickerStyle(.wheel)
-                    .labelsHidden()
+                    .tint(.accentOcean)
                 }
             }
         }
