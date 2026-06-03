@@ -1,0 +1,119 @@
+import SwiftUI
+import SwiftData
+
+struct StatsView: View {
+    @Query private var goals: [Goal]
+    @State private var viewModel = StatsViewModel()
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                // Main stats grid
+                LazyVGrid(columns: [
+                    GridItem(.flexible(), spacing: 16),
+                    GridItem(.flexible(), spacing: 16)
+                ], spacing: 16) {
+                    StatCardView(
+                        title: String(localized: "stats.active", defaultValue: "Active"),
+                        value: "\(viewModel.activeCount)",
+                        systemImage: "flame.fill",
+                        color: .accentGreen
+                    )
+
+                    StatCardView(
+                        title: String(localized: "stats.completed", defaultValue: "Completed"),
+                        value: "\(viewModel.completedCount)",
+                        systemImage: "checkmark.circle.fill",
+                        color: .accentGreen
+                    )
+
+                    StatCardView(
+                        title: String(localized: "stats.streak", defaultValue: "Best Streak"),
+                        value: "\(viewModel.bestStreak) " + String(localized: "stats.streak.days", defaultValue: "d"),
+                        systemImage: "bolt.fill",
+                        color: .warning
+                    )
+
+                    StatCardView(
+                        title: String(localized: "stats.progress", defaultValue: "Progress"),
+                        value: "\(Int(viewModel.globalProgress * 100))%",
+                        systemImage: "chart.line.uptrend.xyaxis",
+                        color: .accentGreen
+                    )
+                }
+                .padding(.horizontal)
+
+                // Progress overview
+                if !goals.filter({ $0.status == .active }).isEmpty {
+                    activeGoalsSection
+                }
+            }
+            .padding(.vertical)
+        }
+        .background(Color.backgroundPrimary)
+        .navigationTitle(String(localized: "stats.title", defaultValue: "Statistics"))
+        .onAppear {
+            viewModel.refresh(goals: goals)
+        }
+        .onChange(of: goals.count) {
+            viewModel.refresh(goals: goals)
+        }
+    }
+
+    // MARK: - Active Goals Overview
+
+    private var activeGoalsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(String(localized: "stats.active.goals", defaultValue: "Active Goals"))
+                .font(.headline)
+                .padding(.horizontal)
+
+            VStack(spacing: 0) {
+                ForEach(goals.filter({ $0.status == .active })) { goal in
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(goal.title)
+                                .font(.subheadline.weight(.medium))
+                                .foregroundStyle(.textPrimary)
+
+                            Text("\(Int(goal.progress * 100))%")
+                                .font(.caption)
+                                .foregroundStyle(.textSecondary)
+                        }
+
+                        Spacer()
+
+                        // Mini progress ring
+                        ZStack {
+                            Circle()
+                                .stroke(Color(.systemGray5), lineWidth: 4)
+
+                            Circle()
+                                .trim(from: 0, to: goal.progress)
+                                .stroke(Color.accentGreen, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                                .rotationEffect(.degrees(-90))
+                        }
+                        .frame(width: 32, height: 32)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+
+                    if goal.id != goals.filter({ $0.status == .active }).last?.id {
+                        Divider()
+                            .padding(.leading, 16)
+                    }
+                }
+            }
+            .background(Color.backgroundSecondary)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .padding(.horizontal)
+        }
+    }
+}
+
+#Preview {
+    NavigationStack {
+        StatsView()
+    }
+    .modelContainer(for: Goal.self, inMemory: true)
+}
