@@ -10,11 +10,14 @@ struct GoalDetailView: View {
     @State private var showingDeleteAlert = false
 
     var body: some View {
+        let progress = goal.progress
+        let sortedSteps = goal.sortedSteps
+        
         ScrollView {
             VStack(spacing: 24) {
                 headerSection
-                progressSection
-                stepsSection
+                progressSection(progress: progress)
+                stepsSection(sortedSteps: sortedSteps)
                 if goal.repetition != .none {
                     dailyCompletionSection
                 }
@@ -133,20 +136,20 @@ struct GoalDetailView: View {
 
     // MARK: - Progress
 
-    private var progressSection: some View {
+    private func progressSection(progress: Double) -> some View {
         VStack(spacing: 16) {
             ZStack {
                 Circle()
                     .stroke(Color(.systemGray5), lineWidth: 10)
 
                 Circle()
-                    .trim(from: 0, to: goal.progress)
+                    .trim(from: 0, to: progress)
                     .stroke(Color.accentOcean, style: StrokeStyle(lineWidth: 10, lineCap: .round))
                     .rotationEffect(.degrees(-90))
-                    .animation(.spring(duration: 0.6), value: goal.progress)
+                    .animation(.spring(duration: 0.6), value: progress)
 
                 VStack(spacing: 2) {
-                    Text("\(Int(goal.progress * 100))%")
+                    Text("\(Int(progress * 100))%")
                         .font(.system(.title, design: .rounded, weight: .bold))
                         .foregroundStyle(.textPrimary)
                         .contentTransition(.numericText())
@@ -164,13 +167,13 @@ struct GoalDetailView: View {
 
     // MARK: - Steps
 
-    private var stepsSection: some View {
+    private func stepsSection(sortedSteps: [GoalStep]) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(String(localized: "detail.steps", defaultValue: "Steps"))
                 .font(.headline)
                 .foregroundStyle(.textPrimary)
 
-            if goal.sortedSteps.isEmpty {
+            if sortedSteps.isEmpty {
                 Text(String(localized: "detail.steps.empty", defaultValue: "No steps defined."))
                     .font(.subheadline)
                     .foregroundStyle(.textTertiary)
@@ -178,14 +181,14 @@ struct GoalDetailView: View {
                     .padding(.vertical, 20)
             } else {
                 VStack(spacing: 0) {
-                    ForEach(goal.sortedSteps) { step in
+                    ForEach(Array(sortedSteps.enumerated()), id: \.element.id) { index, step in
                         StepRowView(step: step) {
                             withAnimation(.spring(duration: 0.3)) {
                                 viewModel.toggleStep(step)
                             }
                         }
 
-                        if step.id != goal.sortedSteps.last?.id {
+                        if index < sortedSteps.count - 1 {
                             Divider()
                                 .padding(.leading, 44)
                         }
