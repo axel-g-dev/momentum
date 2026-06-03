@@ -67,7 +67,7 @@ final class SettingsViewModel {
                 goals: goals
             )
         } else {
-            NotificationService.shared.cancelAllNotifications()
+            NotificationService.shared.cancelDailyReminder()
         }
     }
 }

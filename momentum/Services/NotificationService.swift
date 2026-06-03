@@ -66,8 +66,8 @@ final class NotificationService {
         }
     }
 
-    func cancelAllNotifications() {
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+    func cancelDailyReminder() {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["daily_reminder"])
     }
 
     func scheduleGoalReminder(for goal: Goal) {
