@@ -54,10 +54,10 @@ struct GoalRowView: View {
             Text("\(goal.currentStreak)")
                 .font(.caption.weight(.semibold))
         }
-        .foregroundStyle(.accentGreen)
+        .foregroundStyle(.accentOcean)
         .padding(.horizontal, 8)
         .padding(.vertical, 3)
-        .background(.accentGreenLight, in: Capsule())
+        .background(.accentOceanLight, in: Capsule())
     }
 
     private var progressBar: some View {
@@ -69,7 +69,7 @@ struct GoalRowView: View {
                         .frame(height: 6)
 
                     Capsule()
-                        .fill(Color.accentGreen)
+                        .fill(Color.accentOcean)
                         .frame(width: geometry.size.width * goal.progress, height: 6)
                         .animation(.spring(duration: 0.4), value: goal.progress)
                 }

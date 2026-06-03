@@ -34,7 +34,7 @@ struct MainTabView: View {
                 )
             }
         }
-        .tint(.accentGreen)
+        .tint(.accentOcean)
     }
 }
 

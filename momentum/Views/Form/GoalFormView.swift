@@ -82,7 +82,7 @@ struct GoalFormView: View {
                 String(localized: "form.deadline.toggle", defaultValue: "Set a deadline"),
                 isOn: $viewModel.hasDeadline.animation()
             )
-            .tint(.accentGreen)
+            .tint(.accentOcean)
 
             if viewModel.hasDeadline {
                 DatePicker(
@@ -91,7 +91,7 @@ struct GoalFormView: View {
                     in: Date.now...,
                     displayedComponents: [.date, .hourAndMinute]
                 )
-                .tint(.accentGreen)
+                .tint(.accentOcean)
             }
         }
     }
@@ -159,7 +159,7 @@ struct GoalFormView: View {
                     String(localized: "form.step.add", defaultValue: "Add a step"),
                     systemImage: "plus.circle.fill"
                 )
-                .foregroundStyle(.accentGreen)
+                .foregroundStyle(.accentOcean)
             }
         } header: {
             Text(String(localized: "form.steps.header", defaultValue: "Steps"))

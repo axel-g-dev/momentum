@@ -4,31 +4,14 @@ import SwiftData
 struct SettingsView: View {
     @Query private var goals: [Goal]
     @State private var viewModel = SettingsViewModel()
-    @AppStorage("appLanguage") private var appLanguage: String = "system"
-
     var body: some View {
         Form {
-            preferencesSection
             notificationsSection
             aboutSection
         }
         .navigationTitle(String(localized: "settings.title", defaultValue: "Settings"))
         .task {
             await viewModel.checkPermission()
-        }
-    }
-
-    // MARK: - Preferences
-
-    private var preferencesSection: some View {
-        Section {
-            Picker(String(localized: "settings.language", defaultValue: "Language"), selection: $appLanguage) {
-                Text(String(localized: "settings.language.system", defaultValue: "System")).tag("system")
-                Text("English").tag("en")
-                Text("Français").tag("fr")
-            }
-        } header: {
-            Text(String(localized: "settings.preferences.header", defaultValue: "Preferences"))
         }
     }
 
@@ -40,7 +23,7 @@ struct SettingsView: View {
                 String(localized: "settings.notifications.toggle", defaultValue: "Daily Reminder"),
                 isOn: $viewModel.notificationsEnabled
             )
-            .tint(.accentGreen)
+            .tint(.accentOcean)
             .onChange(of: viewModel.notificationsEnabled) { _, enabled in
                 if enabled && !viewModel.permissionGranted {
                     Task {
@@ -58,7 +41,7 @@ struct SettingsView: View {
                     selection: $viewModel.reminderDate,
                     displayedComponents: .hourAndMinute
                 )
-                .tint(.accentGreen)
+                .tint(.accentOcean)
                 .onChange(of: viewModel.reminderDate) {
                     viewModel.updateNotificationSchedule(goals: goals)
                 }

@@ -40,7 +40,7 @@ struct StatCardView: View {
             title: "Active",
             value: "5",
             systemImage: "flame.fill",
-            color: .accentGreen
+            color: .accentOcean
         )
         StatCardView(
             title: "Best Streak",

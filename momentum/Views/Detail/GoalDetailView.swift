@@ -112,7 +112,7 @@ struct GoalDetailView: View {
                         Image(systemName: "flame.fill")
                     }
                     .font(.subheadline)
-                    .foregroundStyle(.accentGreen)
+                    .foregroundStyle(.accentOcean)
                 }
             }
         }
@@ -129,7 +129,7 @@ struct GoalDetailView: View {
 
                 Circle()
                     .trim(from: 0, to: goal.progress)
-                    .stroke(Color.accentGreen, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                    .stroke(Color.accentOcean, style: StrokeStyle(lineWidth: 10, lineCap: .round))
                     .rotationEffect(.degrees(-90))
                     .animation(.spring(duration: 0.6), value: goal.progress)
 
@@ -192,14 +192,14 @@ struct GoalDetailView: View {
             if goal.isCompletedToday {
                 HStack {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.accentGreen)
+                        .foregroundStyle(.accentOcean)
                     Text(String(localized: "detail.completed.today", defaultValue: "Completed today"))
                         .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.accentGreen)
+                        .foregroundStyle(.accentOcean)
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.accentGreenLight)
+                .background(Color.accentOceanLight)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
 
                 Button {
@@ -226,7 +226,7 @@ struct GoalDetailView: View {
                     .padding()
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.accentGreen)
+                .tint(.accentOcean)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             }
         }

@@ -1,8 +1,8 @@
 import SwiftUI
 
 extension Color {
-    static let accentGreen = Color(red: 0.30, green: 0.69, blue: 0.47)
-    static let accentGreenLight = Color(red: 0.30, green: 0.69, blue: 0.47).opacity(0.15)
+    static let accentOcean = Color(red: 0.0, green: 0.55, blue: 0.85)
+    static let accentOceanLight = Color(red: 0.0, green: 0.55, blue: 0.85).opacity(0.15)
     static let backgroundPrimary = Color(.systemBackground)
     static let backgroundSecondary = Color(.secondarySystemBackground)
     static let backgroundTertiary = Color(.tertiarySystemBackground)
@@ -14,8 +14,8 @@ extension Color {
 }
 
 extension ShapeStyle where Self == Color {
-    static var accentGreen: Color { Color.accentGreen }
-    static var accentGreenLight: Color { Color(red: 0.30, green: 0.69, blue: 0.47).opacity(0.15) }
+    static var accentOcean: Color { Color.accentOcean }
+    static var accentOceanLight: Color { Color.accentOceanLight }
     static var textPrimary: Color { Color(.label) }
     static var textSecondary: Color { Color(.secondaryLabel) }
     static var textTertiary: Color { Color(.tertiaryLabel) }

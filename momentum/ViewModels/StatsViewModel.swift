@@ -9,20 +9,24 @@ final class StatsViewModel {
     var globalProgress: Double = 0
 
     func refresh(goals: [Goal]) {
-        let active = goals.filter { $0.status == .active }
-        let completed = goals.filter { $0.status == .completed }
-
-        activeCount = active.count
-        completedCount = completed.count
-
-        // Best streak across all goals
-        bestStreak = goals.map(\.currentStreak).max() ?? 0
-
-        // Global progress = average progress of active goals
-        if active.isEmpty {
-            globalProgress = 0
-        } else {
-            globalProgress = active.map(\.progress).reduce(0, +) / Double(active.count)
+        var activeProgressSum: Double = 0
+        var maxStreak = 0
+        var activeC = 0
+        var completedC = 0
+        
+        for goal in goals {
+            maxStreak = max(maxStreak, goal.currentStreak)
+            if goal.status == .active {
+                activeC += 1
+                activeProgressSum += goal.progress
+            } else if goal.status == .completed {
+                completedC += 1
+            }
         }
+        
+        self.activeCount = activeC
+        self.completedCount = completedC
+        self.bestStreak = maxStreak
+        self.globalProgress = activeC > 0 ? (activeProgressSum / Double(activeC)) : 0
     }
 }

@@ -5,6 +5,10 @@ struct StatsView: View {
     @Query private var goals: [Goal]
     @State private var viewModel = StatsViewModel()
 
+    private var activeGoals: [Goal] {
+        goals.filter { $0.status == .active }
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -17,14 +21,14 @@ struct StatsView: View {
                         title: String(localized: "stats.active", defaultValue: "Active"),
                         value: "\(viewModel.activeCount)",
                         systemImage: "flame.fill",
-                        color: .accentGreen
+                        color: .accentOcean
                     )
 
                     StatCardView(
                         title: String(localized: "stats.completed", defaultValue: "Completed"),
                         value: "\(viewModel.completedCount)",
                         systemImage: "checkmark.circle.fill",
-                        color: .accentGreen
+                        color: .accentOcean
                     )
 
                     StatCardView(
@@ -38,13 +42,13 @@ struct StatsView: View {
                         title: String(localized: "stats.progress", defaultValue: "Progress"),
                         value: "\(Int(viewModel.globalProgress * 100))%",
                         systemImage: "chart.line.uptrend.xyaxis",
-                        color: .accentGreen
+                        color: .accentOcean
                     )
                 }
                 .padding(.horizontal)
 
                 // Progress overview
-                if !goals.filter({ $0.status == .active }).isEmpty {
+                if !activeGoals.isEmpty {
                     activeGoalsSection
                 }
             }
@@ -69,7 +73,7 @@ struct StatsView: View {
                 .padding(.horizontal)
 
             VStack(spacing: 0) {
-                ForEach(goals.filter({ $0.status == .active })) { goal in
+                ForEach(activeGoals) { goal in
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(goal.title)
@@ -90,7 +94,7 @@ struct StatsView: View {
 
                             Circle()
                                 .trim(from: 0, to: goal.progress)
-                                .stroke(Color.accentGreen, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                                .stroke(Color.accentOcean, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                                 .rotationEffect(.degrees(-90))
                         }
                         .frame(width: 32, height: 32)
@@ -98,7 +102,7 @@ struct StatsView: View {
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
 
-                    if goal.id != goals.filter({ $0.status == .active }).last?.id {
+                    if goal.id != activeGoals.last?.id {
                         Divider()
                             .padding(.leading, 16)
                     }

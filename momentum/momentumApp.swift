@@ -21,12 +21,9 @@ struct MomentumApp: App {
         }
     }()
 
-    @AppStorage("appLanguage") private var appLanguage: String = "system"
-
     var body: some Scene {
         WindowGroup {
             MainTabView()
-                .environment(\.locale, appLanguage == "system" ? .current : Locale(identifier: appLanguage))
         }
         .modelContainer(sharedModelContainer)
     }

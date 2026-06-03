@@ -82,7 +82,7 @@ struct HomeView: View {
                 Text(emptyStateTitle)
             } icon: {
                 Image(systemName: emptyStateIcon)
-                    .foregroundStyle(.accentGreen)
+                    .foregroundStyle(.accentOcean)
             }
         } description: {
             Text(emptyStateDescription)
@@ -94,7 +94,7 @@ struct HomeView: View {
                     Text(String(localized: "home.empty.action", defaultValue: "Create a Goal"))
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.accentGreen)
+                .tint(.accentOcean)
             }
         }
     }

@@ -9,7 +9,7 @@ struct StepRowView: View {
             HStack(spacing: 12) {
                 Image(systemName: step.isCompleted ? "checkmark.circle.fill" : "circle")
                     .font(.title3)
-                    .foregroundStyle(step.isCompleted ? .accentGreen : Color(.systemGray3))
+                    .foregroundStyle(step.isCompleted ? .accentOcean : Color(.systemGray3))
                     .animation(.easeInOut(duration: 0.2), value: step.isCompleted)
 
                 Text(step.title)
