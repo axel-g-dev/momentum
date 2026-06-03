@@ -90,7 +90,16 @@ final class NotificationService {
         let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: reminderDate)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
 
-        let request = UNNotificationRequest(identifier: "goal_reminder_\(goal.notificationId)", content: content, trigger: trigger)
+        let identifier: String
+        if let existingId = goal.notificationId {
+            identifier = existingId
+        } else {
+            let newId = UUID().uuidString
+            goal.notificationId = newId
+            identifier = newId
+        }
+
+        let request = UNNotificationRequest(identifier: "goal_reminder_\(identifier)", content: content, trigger: trigger)
 
         center.add(request) { error in
             if let error {
@@ -100,7 +109,8 @@ final class NotificationService {
     }
 
     func cancelGoalReminder(for goal: Goal) {
+        guard let notificationId = goal.notificationId else { return }
         let center = UNUserNotificationCenter.current()
-        center.removePendingNotificationRequests(withIdentifiers: ["goal_reminder_\(goal.notificationId)"])
+        center.removePendingNotificationRequests(withIdentifiers: ["goal_reminder_\(notificationId)"])
     }
 }

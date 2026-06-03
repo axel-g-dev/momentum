@@ -8,7 +8,7 @@ final class Goal {
     var createdAt: Date
     var deadline: Date?
     var reminderDate: Date?
-    var notificationId: String
+    var notificationId: String?
     var repetitionRaw: String
     var statusRaw: String
     @Relationship(deleteRule: .cascade, inverse: \GoalStep.goal)
