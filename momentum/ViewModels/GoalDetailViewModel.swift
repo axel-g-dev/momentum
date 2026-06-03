@@ -32,4 +32,8 @@ final class GoalDetailViewModel {
     func archiveGoal(_ goal: Goal) {
         goal.status = .archived
     }
+
+    func unarchiveGoal(_ goal: Goal) {
+        goal.status = goal.progress >= 1.0 && goal.repetition == .none ? .completed : .active
+    }
 }

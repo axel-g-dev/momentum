@@ -9,11 +9,11 @@ Momentum te permet de créer des objectifs, suivre leur progression, maintenir d
 ## Fonctionnalités
 
 ### Gestion des objectifs
-- **Créer** un objectif avec un titre, une description (optionnelle), une date limite (optionnelle avec heure) et un type de répétition (aucun, quotidien, hebdomadaire).
-- **Modifier** un objectif existant — titre, description, date limite, répétition, et étapes.
+- **Créer** un objectif avec un titre, une description (optionnelle), une date limite (optionnelle avec heure), une date de rappel spécifique (optionnelle), et un type de répétition (aucun, quotidien, hebdomadaire).
+- **Modifier** un objectif existant — titre, description, dates, répétition, et étapes.
 - **Supprimer** un objectif avec confirmation (action irréversible).
 - **Archiver** un objectif pour le retirer de la vue active sans le supprimer.
-- **Restaurer** un objectif archivé vers l'état actif.
+- **Désarchiver** un objectif archivé pour le remettre dans la liste active.
 
 ### Étapes (checklist)
 - Chaque objectif peut contenir des **sous-étapes** (checklist).
@@ -41,7 +41,7 @@ Le tableau de bord affiche 4 indicateurs clés :
 
 ### Notifications locales
 - Rappels quotidiens configurables depuis l'écran des Réglages.
-- Choix de l'heure du rappel.
+- Rappels spécifiques : possiblité de définir une date et heure précise de rappel pour un objectif donné.
 - Messages contextuels :
   - Message neutre si pas de streak : _"Tu avais prévu d'avancer sur tes objectifs aujourd'hui."_
   - Message motivant si streak actif : _"Continue comme ça, tu es sur une belle série !"_
@@ -183,6 +183,6 @@ GoalHistory (Historique)
 
 ## Version
 
-- **Version actuelle** : 1.0.1
+- **Version actuelle** : 1.0.3
 - **Deployment target** : iOS 17.0
 - **Langues** : Anglais, Français

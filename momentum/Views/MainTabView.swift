@@ -5,22 +5,22 @@ struct MainTabView: View {
     var body: some View {
         TabView {
             NavigationStack {
-                HomeView()
-            }
-            .tabItem {
-                Label(
-                    String(localized: "tab.home", defaultValue: "Home"),
-                    systemImage: "house.fill"
-                )
-            }
-
-            NavigationStack {
                 StatsView()
             }
             .tabItem {
                 Label(
                     String(localized: "tab.stats", defaultValue: "Stats"),
                     systemImage: "chart.bar.fill"
+                )
+            }
+
+            NavigationStack {
+                HomeView()
+            }
+            .tabItem {
+                Label(
+                    String(localized: "tab.home", defaultValue: "Home"),
+                    systemImage: "house.fill"
                 )
             }
 

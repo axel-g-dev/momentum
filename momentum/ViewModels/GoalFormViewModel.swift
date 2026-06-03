@@ -7,6 +7,8 @@ final class GoalFormViewModel {
     var goalDescription: String = ""
     var hasDeadline: Bool = false
     var deadline: Date = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: .now) ?? .now
+    var hasReminder: Bool = false
+    var reminderDate: Date = Calendar.current.date(byAdding: .day, value: 1, to: .now) ?? .now
     var repetition: GoalRepetition = .none
     var stepTitles: [String] = [""]
 
@@ -23,6 +25,8 @@ final class GoalFormViewModel {
         goalDescription = goal.goalDescription
         hasDeadline = goal.deadline != nil
         deadline = goal.deadline ?? Calendar.current.date(byAdding: .weekOfYear, value: 1, to: .now) ?? .now
+        hasReminder = goal.reminderDate != nil
+        reminderDate = goal.reminderDate ?? Calendar.current.date(byAdding: .day, value: 1, to: .now) ?? .now
         repetition = goal.repetition
         stepTitles = goal.sortedSteps.map(\.title)
         if stepTitles.isEmpty {
@@ -44,6 +48,7 @@ final class GoalFormViewModel {
             title: title.trimmingCharacters(in: .whitespacesAndNewlines),
             goalDescription: goalDescription.trimmingCharacters(in: .whitespacesAndNewlines),
             deadline: hasDeadline ? deadline : nil,
+            reminderDate: hasReminder ? reminderDate : nil,
             repetition: repetition
         )
 
@@ -53,12 +58,17 @@ final class GoalFormViewModel {
         }
 
         context.insert(goal)
+        
+        if hasReminder {
+            NotificationService.shared.scheduleGoalReminder(for: goal)
+        }
     }
 
     func updateGoal(_ goal: Goal, context: ModelContext) {
         goal.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
         goal.goalDescription = goalDescription.trimmingCharacters(in: .whitespacesAndNewlines)
         goal.deadline = hasDeadline ? deadline : nil
+        goal.reminderDate = hasReminder ? reminderDate : nil
         goal.repetition = repetition
 
         // Remove old steps
@@ -71,6 +81,12 @@ final class GoalFormViewModel {
         for (index, stepTitle) in nonEmptyStepTitles.enumerated() {
             let step = GoalStep(title: stepTitle, order: index)
             goal.steps.append(step)
+        }
+        
+        if hasReminder {
+            NotificationService.shared.scheduleGoalReminder(for: goal)
+        } else {
+            NotificationService.shared.cancelGoalReminder(for: goal)
         }
     }
 }

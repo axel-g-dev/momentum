@@ -26,6 +26,7 @@ struct GoalFormView: View {
             Form {
                 basicInfoSection
                 deadlineSection
+                reminderSection
                 repetitionSection
                 stepsSection
             }
@@ -88,6 +89,28 @@ struct GoalFormView: View {
                 DatePicker(
                     String(localized: "form.deadline.date", defaultValue: "Deadline"),
                     selection: $viewModel.deadline,
+                    in: Date.now...,
+                    displayedComponents: [.date, .hourAndMinute]
+                )
+                .tint(.accentOcean)
+            }
+        }
+    }
+
+    // MARK: - Reminder
+
+    private var reminderSection: some View {
+        Section {
+            Toggle(
+                String(localized: "form.reminder.toggle", defaultValue: "Set a specific reminder"),
+                isOn: $viewModel.hasReminder.animation()
+            )
+            .tint(.accentOcean)
+
+            if viewModel.hasReminder {
+                DatePicker(
+                    String(localized: "form.reminder.date", defaultValue: "Reminder time"),
+                    selection: $viewModel.reminderDate,
                     in: Date.now...,
                     displayedComponents: [.date, .hourAndMinute]
                 )

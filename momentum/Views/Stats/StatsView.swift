@@ -21,21 +21,21 @@ struct StatsView: View {
                         title: String(localized: "stats.active", defaultValue: "Active"),
                         value: "\(viewModel.activeCount)",
                         systemImage: "flame.fill",
-                        color: .accentOcean
+                        color: .orange
                     )
 
                     StatCardView(
                         title: String(localized: "stats.completed", defaultValue: "Completed"),
                         value: "\(viewModel.completedCount)",
                         systemImage: "checkmark.circle.fill",
-                        color: .accentOcean
+                        color: .green
                     )
 
                     StatCardView(
                         title: String(localized: "stats.streak", defaultValue: "Best Streak"),
                         value: "\(viewModel.bestStreak) " + String(localized: "stats.streak.days", defaultValue: "d"),
                         systemImage: "bolt.fill",
-                        color: .warning
+                        color: .yellow
                     )
 
                     StatCardView(

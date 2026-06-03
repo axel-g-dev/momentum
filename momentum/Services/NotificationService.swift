@@ -69,4 +69,38 @@ final class NotificationService {
     func cancelAllNotifications() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
     }
+
+    func scheduleGoalReminder(for goal: Goal) {
+        let center = UNUserNotificationCenter.current()
+        // Always cancel existing reminder for this goal to avoid duplicates
+        cancelGoalReminder(for: goal)
+
+        guard let reminderDate = goal.reminderDate else { return }
+
+        // Don't schedule if date is in the past
+        if reminderDate < .now { return }
+
+        let content = UNMutableNotificationContent()
+        content.title = String(localized: "notification.title", defaultValue: "Momentum")
+        
+        let message = String(localized: "notification.reminder.specific", defaultValue: "Reminder: %@")
+        content.body = String(format: message, goal.title)
+        content.sound = .default
+
+        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: reminderDate)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+
+        let request = UNNotificationRequest(identifier: "goal_reminder_\(goal.notificationId)", content: content, trigger: trigger)
+
+        center.add(request) { error in
+            if let error {
+                print("Failed to schedule goal reminder: \(error)")
+            }
+        }
+    }
+
+    func cancelGoalReminder(for goal: Goal) {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: ["goal_reminder_\(goal.notificationId)"])
+    }
 }

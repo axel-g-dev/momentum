@@ -7,6 +7,8 @@ final class Goal {
     var goalDescription: String
     var createdAt: Date
     var deadline: Date?
+    var reminderDate: Date?
+    var notificationId: String
     var repetitionRaw: String
     var statusRaw: String
     @Relationship(deleteRule: .cascade, inverse: \GoalStep.goal)
@@ -18,6 +20,7 @@ final class Goal {
         title: String,
         goalDescription: String = "",
         deadline: Date? = nil,
+        reminderDate: Date? = nil,
         repetition: GoalRepetition = .none,
         status: GoalStatus = .active
     ) {
@@ -25,6 +28,8 @@ final class Goal {
         self.goalDescription = goalDescription
         self.createdAt = .now
         self.deadline = deadline
+        self.reminderDate = reminderDate
+        self.notificationId = UUID().uuidString
         self.repetitionRaw = repetition.rawValue
         self.statusRaw = status.rawValue
         self.steps = []

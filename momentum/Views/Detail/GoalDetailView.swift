@@ -36,14 +36,26 @@ struct GoalDetailView: View {
                         )
                     }
 
-                    Button {
-                        viewModel.archiveGoal(goal)
-                        dismiss()
-                    } label: {
-                        Label(
-                            String(localized: "detail.archive", defaultValue: "Archive"),
-                            systemImage: "archivebox"
-                        )
+                    if goal.status == .archived {
+                        Button {
+                            viewModel.unarchiveGoal(goal)
+                            dismiss()
+                        } label: {
+                            Label(
+                                String(localized: "detail.unarchive", defaultValue: "Unarchive"),
+                                systemImage: "tray.and.arrow.up"
+                            )
+                        }
+                    } else {
+                        Button {
+                            viewModel.archiveGoal(goal)
+                            dismiss()
+                        } label: {
+                            Label(
+                                String(localized: "detail.archive", defaultValue: "Archive"),
+                                systemImage: "archivebox"
+                            )
+                        }
                     }
 
                     Divider()
