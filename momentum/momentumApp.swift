@@ -4,6 +4,15 @@ import SwiftData
 @main
 struct MomentumApp: App {
     var sharedModelContainer: ModelContainer = {
+        // Pre-create Application Support directory if it doesn't exist
+        // to prevent SwiftData Sandbox write/stat crash on some iOS Simulators
+        let fileManager = FileManager.default
+        if let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
+            if !fileManager.fileExists(atPath: appSupportURL.path) {
+                try? fileManager.createDirectory(at: appSupportURL, withIntermediateDirectories: true, attributes: nil)
+            }
+        }
+
         let schema = Schema([
             Goal.self,
             GoalStep.self,
