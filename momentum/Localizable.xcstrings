@@ -1,0 +1,426 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "tab.home" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Home" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Accueil" } }
+      }
+    },
+    "tab.stats" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Stats" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Stats" } }
+      }
+    },
+    "tab.settings" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Réglages" } }
+      }
+    },
+    "home.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "My Goals" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Mes Objectifs" } }
+      }
+    },
+    "home.search" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Search goals" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Rechercher des objectifs" } }
+      }
+    },
+    "home.filter" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Filter" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Filtrer" } }
+      }
+    },
+    "home.empty.action" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Create a Goal" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Créer un objectif" } }
+      }
+    },
+    "home.empty.active.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No active goals" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucun objectif actif" } }
+      }
+    },
+    "home.empty.completed.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No completed goals" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucun objectif terminé" } }
+      }
+    },
+    "home.empty.archived.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No archived goals" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucun objectif archivé" } }
+      }
+    },
+    "home.empty.active.desc" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Start by creating your first goal." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Commence par créer ton premier objectif." } }
+      }
+    },
+    "home.empty.completed.desc" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Completed goals will appear here." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Les objectifs terminés apparaîtront ici." } }
+      }
+    },
+    "home.empty.archived.desc" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Archived goals will appear here." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Les objectifs archivés apparaîtront ici." } }
+      }
+    },
+    "detail.edit" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Edit" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Modifier" } }
+      }
+    },
+    "detail.archive" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Archive" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Archiver" } }
+      }
+    },
+    "detail.delete" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Supprimer" } }
+      }
+    },
+    "detail.delete.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete Goal" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Supprimer l'objectif" } }
+      }
+    },
+    "detail.delete.cancel" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cancel" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Annuler" } }
+      }
+    },
+    "detail.delete.confirm" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Supprimer" } }
+      }
+    },
+    "detail.delete.message" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This action cannot be undone." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Cette action est irréversible." } }
+      }
+    },
+    "detail.streak.days" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "days" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "jours" } }
+      }
+    },
+    "detail.progress" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Progress" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Progression" } }
+      }
+    },
+    "detail.steps" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Steps" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Étapes" } }
+      }
+    },
+    "detail.steps.empty" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No steps defined." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucune étape définie." } }
+      }
+    },
+    "detail.completed.today" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Completed today" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Complété aujourd'hui" } }
+      }
+    },
+    "detail.undo" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Undo" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Annuler" } }
+      }
+    },
+    "detail.markdone" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Mark as done today" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Marquer comme fait aujourd'hui" } }
+      }
+    },
+    "form.title.edit" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Edit Goal" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Modifier l'objectif" } }
+      }
+    },
+    "form.title.new" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "New Goal" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Nouvel objectif" } }
+      }
+    },
+    "form.cancel" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cancel" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Annuler" } }
+      }
+    },
+    "form.save" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Save" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Enregistrer" } }
+      }
+    },
+    "form.title.placeholder" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Goal title" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Titre de l'objectif" } }
+      }
+    },
+    "form.description.placeholder" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Description (optional)" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Description (optionnel)" } }
+      }
+    },
+    "form.deadline.toggle" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Set a deadline" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Définir une date limite" } }
+      }
+    },
+    "form.deadline.date" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Deadline" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Date limite" } }
+      }
+    },
+    "form.repetition" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Repetition" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Répétition" } }
+      }
+    },
+    "form.step.placeholder" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Step %lld" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Étape %lld" } }
+      }
+    },
+    "form.step.add" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add a step" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ajouter une étape" } }
+      }
+    },
+    "form.steps.header" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Steps" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Étapes" } }
+      }
+    },
+    "stats.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Statistics" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Statistiques" } }
+      }
+    },
+    "stats.active" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Active" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Actifs" } }
+      }
+    },
+    "stats.completed" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Completed" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Terminés" } }
+      }
+    },
+    "stats.streak" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Best Streak" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Meilleure série" } }
+      }
+    },
+    "stats.streak.days" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "d" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "j" } }
+      }
+    },
+    "stats.progress" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Progress" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Progression" } }
+      }
+    },
+    "stats.active.goals" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Active Goals" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Objectifs actifs" } }
+      }
+    },
+    "settings.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Réglages" } }
+      }
+    },
+    "settings.language" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Language" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Langue" } }
+      }
+    },
+    "settings.language.system" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "System" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Système" } }
+      }
+    },
+    "settings.preferences.header" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Preferences" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Préférences" } }
+      }
+    },
+    "settings.notifications.toggle" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Daily Reminder" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Rappel quotidien" } }
+      }
+    },
+    "settings.notifications.time" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Reminder Time" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Heure du rappel" } }
+      }
+    },
+    "settings.notifications.denied" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Notifications are disabled in system settings." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Les notifications sont désactivées dans les réglages système." } }
+      }
+    },
+    "settings.notifications.header" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Notifications" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Notifications" } }
+      }
+    },
+    "settings.notifications.footer" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Receive a daily reminder to work on your goals." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Reçois un rappel quotidien pour avancer sur tes objectifs." } }
+      }
+    },
+    "settings.version" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Version" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Version" } }
+      }
+    },
+    "settings.build" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Build" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Build" } }
+      }
+    },
+    "settings.about.header" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "About" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "À propos" } }
+      }
+    },
+    "status.active" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Active" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Actifs" } }
+      }
+    },
+    "status.completed" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Completed" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Terminés" } }
+      }
+    },
+    "status.archived" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Archived" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Archivés" } }
+      }
+    },
+    "repetition.none" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "None" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucune" } }
+      }
+    },
+    "repetition.daily" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Daily" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Quotidien" } }
+      }
+    },
+    "repetition.weekly" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Weekly" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Hebdomadaire" } }
+      }
+    },
+    "notification.title" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Momentum" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Momentum" } }
+      }
+    },
+    "notification.streak" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Keep going, you're on a great streak!" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Continue comme ça, tu es sur une belle série !" } }
+      }
+    },
+    "notification.continue" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Stay consistent — progress adds up." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Reste régulier — chaque progrès compte." } }
+      }
+    },
+    "notification.reminder.goal" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "You planned to work on your goals today." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tu avais prévu d'avancer sur tes objectifs aujourd'hui." } }
+      }
+    },
+    "notification.reminder.progress" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "A small step forward is still progress." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Un petit pas en avant, c'est déjà du progrès." } }
+      }
+    },
+    "notification.reminder.default" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Take a moment to review your goals." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Prends un moment pour revoir tes objectifs." } }
+      }
+    }
+  },
+  "version" : "1.0"
+}
