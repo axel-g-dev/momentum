@@ -38,8 +38,9 @@ struct GoalRowView: View {
             }
 
             // Progress bar
+            let progress = goal.progress
             if !goal.steps.isEmpty {
-                progressBar
+                progressBar(progress: progress)
             }
         }
         .padding(.vertical, 4)
@@ -60,7 +61,7 @@ struct GoalRowView: View {
         .background(.accentOceanLight, in: Capsule())
     }
 
-    private var progressBar: some View {
+    private func progressBar(progress: Double) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
@@ -70,13 +71,13 @@ struct GoalRowView: View {
 
                     Capsule()
                         .fill(Color.accentOcean)
-                        .frame(width: geometry.size.width * goal.progress, height: 6)
-                        .animation(.spring(duration: 0.4), value: goal.progress)
+                        .frame(width: geometry.size.width * progress, height: 6)
+                        .animation(.spring(duration: 0.4), value: progress)
                 }
             }
             .frame(height: 6)
 
-            Text("\(Int(goal.progress * 100))%")
+            Text("\(Int(progress * 100))%")
                 .font(.caption2)
                 .foregroundStyle(.textSecondary)
         }
