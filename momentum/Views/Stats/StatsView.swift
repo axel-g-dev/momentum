@@ -62,6 +62,9 @@ struct StatsView: View {
         .onChange(of: goals) {
             viewModel.refresh(goals: goals)
         }
+        .navigationDestination(for: Goal.self) { goal in
+            GoalDetailView(goal: goal)
+        }
     }
 
     // MARK: - Active Goals Overview
@@ -76,33 +79,42 @@ struct StatsView: View {
                 let list = activeGoals
                 ForEach(Array(list.enumerated()), id: \.element.id) { index, goal in
                     let progress = goal.progress
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(goal.title)
-                                .font(.subheadline.weight(.medium))
-                                .foregroundStyle(.textPrimary)
+                    NavigationLink(value: goal) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(goal.title)
+                                    .font(.subheadline.weight(.medium))
+                                    .foregroundStyle(.textPrimary)
 
-                            Text("\(Int(progress * 100))%")
-                                .font(.caption)
-                                .foregroundStyle(.textSecondary)
+                                Text("\(Int(progress * 100))%")
+                                    .font(.caption)
+                                    .foregroundStyle(.textSecondary)
+                            }
+
+                            Spacer()
+
+                            // Mini progress ring
+                            ZStack {
+                                Circle()
+                                    .stroke(Color(.systemGray5), lineWidth: 4)
+
+                                Circle()
+                                    .trim(from: 0, to: progress)
+                                    .stroke(Color.accentOcean, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                                    .rotationEffect(.degrees(-90))
+                            }
+                            .frame(width: 32, height: 32)
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.caption2)
+                                .foregroundStyle(Color(.systemGray3))
+                                .padding(.leading, 6)
                         }
-
-                        Spacer()
-
-                        // Mini progress ring
-                        ZStack {
-                            Circle()
-                                .stroke(Color(.systemGray5), lineWidth: 4)
-
-                            Circle()
-                                .trim(from: 0, to: progress)
-                                .stroke(Color.accentOcean, style: StrokeStyle(lineWidth: 4, lineCap: .round))
-                                .rotationEffect(.degrees(-90))
-                        }
-                        .frame(width: 32, height: 32)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .contentShape(Rectangle())
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
+                    .buttonStyle(.plain)
 
                     if index < list.count - 1 {
                         Divider()
