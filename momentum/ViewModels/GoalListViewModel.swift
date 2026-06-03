@@ -1,0 +1,37 @@
+import Foundation
+import SwiftData
+import SwiftUI
+
+@Observable
+final class GoalListViewModel {
+    var selectedFilter: GoalStatus = .active
+    var searchText: String = ""
+
+    func filteredGoals(from goals: [Goal]) -> [Goal] {
+        var result = goals.filter { $0.status == selectedFilter }
+
+        if !searchText.isEmpty {
+            result = result.filter {
+                $0.title.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+
+        return result.sorted { $0.createdAt > $1.createdAt }
+    }
+
+    func deleteGoal(_ goal: Goal, context: ModelContext) {
+        context.delete(goal)
+    }
+
+    func archiveGoal(_ goal: Goal) {
+        goal.status = .archived
+    }
+
+    func restoreGoal(_ goal: Goal) {
+        goal.status = .active
+    }
+
+    func completeGoal(_ goal: Goal) {
+        goal.status = .completed
+    }
+}
