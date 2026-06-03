@@ -59,7 +59,7 @@ struct StatsView: View {
         .onAppear {
             viewModel.refresh(goals: goals)
         }
-        .onChange(of: goals.count) {
+        .onChange(of: goals) {
             viewModel.refresh(goals: goals)
         }
     }
@@ -73,14 +73,16 @@ struct StatsView: View {
                 .padding(.horizontal)
 
             VStack(spacing: 0) {
-                ForEach(activeGoals) { goal in
+                let list = activeGoals
+                ForEach(Array(list.enumerated()), id: \.element.id) { index, goal in
+                    let progress = goal.progress
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(goal.title)
                                 .font(.subheadline.weight(.medium))
                                 .foregroundStyle(.textPrimary)
 
-                            Text("\(Int(goal.progress * 100))%")
+                            Text("\(Int(progress * 100))%")
                                 .font(.caption)
                                 .foregroundStyle(.textSecondary)
                         }
@@ -93,7 +95,7 @@ struct StatsView: View {
                                 .stroke(Color(.systemGray5), lineWidth: 4)
 
                             Circle()
-                                .trim(from: 0, to: goal.progress)
+                                .trim(from: 0, to: progress)
                                 .stroke(Color.accentOcean, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                                 .rotationEffect(.degrees(-90))
                         }
@@ -102,7 +104,7 @@ struct StatsView: View {
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
 
-                    if goal.id != activeGoals.last?.id {
+                    if index < list.count - 1 {
                         Divider()
                             .padding(.leading, 16)
                     }
