@@ -1,8 +1,8 @@
 import SwiftUI
 
 extension Color {
-    static let accentOcean = Color(red: 0.0, green: 0.55, blue: 0.85)
-    static let accentOceanLight = Color(red: 0.0, green: 0.55, blue: 0.85).opacity(0.15)
+    static let accentOcean = Color(red: 0.0, green: 0.478, blue: 1.0)
+    static let accentOceanLight = Color(red: 0.0, green: 0.478, blue: 1.0).opacity(0.15)
     static let backgroundPrimary = Color(.systemBackground)
     static let backgroundSecondary = Color(.secondarySystemBackground)
     static let backgroundTertiary = Color(.tertiarySystemBackground)

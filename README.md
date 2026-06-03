@@ -2,54 +2,41 @@
 
 **Application iOS de productivité et de motivation personnelle.**
 
-Momentum te permet de créer des objectifs, suivre leur progression, maintenir des séries de jours consécutifs (streaks) et recevoir des rappels quotidiens pour rester discipliné. L'app est conçue avec un design minimaliste inspiré des applications Apple.
+Momentum te permet de créer des objectifs, suivre leur progression, maintenir des séries de jours consécutifs (streaks) et recevoir des rappels quotidiens pour rester discipliné. L'app est conçue avec un design minimaliste inspiré des applications natives Apple.
 
 ---
 
 ## Fonctionnalités
 
 ### Gestion des objectifs
-- **Créer** un objectif avec un titre, une description (optionnelle), une date limite (optionnelle avec heure), une date de rappel spécifique (optionnelle), et un type de répétition (aucun, quotidien, hebdomadaire).
+- **Créer** un objectif avec un titre, une description (optionnelle), une date limite, une date de rappel spécifique, et un type de répétition (aucun, quotidien, hebdomadaire).
+- **Date & Heure** : Choix simplifié et modulaire façon application Rappels d'Apple (sélection de l'heure optionnelle).
 - **Modifier** un objectif existant — titre, description, dates, répétition, et étapes.
+- **Archiver / Désarchiver** : Gardez l'historique de vos objectifs sans encombrer la vue principale.
 - **Supprimer** un objectif avec confirmation (action irréversible).
-- **Archiver** un objectif pour le retirer de la vue active sans le supprimer.
-- **Désarchiver** un objectif archivé pour le remettre dans la liste active.
 
 ### Étapes (checklist)
-- Chaque objectif peut contenir des **sous-étapes** (checklist).
-- On peut cocher/décocher une étape pour marquer sa progression.
+- Chaque objectif peut contenir des **sous-étapes** dynamiques.
 - La **progression est calculée automatiquement** en pourcentage à partir des étapes cochées.
-- Les étapes sont ajoutables et supprimables dynamiquement dans le formulaire de création/édition.
+- Animations fluides des barres et cercles de progression.
 
 ### Streaks (séries)
 - Un **streak** compte le nombre de jours consécutifs où un objectif a été marqué comme "fait".
-- Le streak est calculé automatiquement à partir de l'historique de complétion quotidienne.
 - Un badge flamme s'affiche à côté des objectifs ayant un streak actif.
 - Si un jour est manqué, le streak repart à zéro.
 
-### Progression globale
-- Le **pourcentage de progression** est affiché sous forme de barre horizontale dans la liste et de cercle dans la page de détail.
-- Des **animations visuelles** accompagnent les changements de progression (spring animations).
-
 ### Statistiques (Dashboard)
-Le tableau de bord affiche 4 indicateurs clés :
-- **Objectifs actifs** : nombre d'objectifs en cours.
-- **Objectifs terminés** : nombre d'objectifs complétés.
-- **Meilleure série** : le plus long streak parmi tous les objectifs.
-- **Progression globale** : moyenne de progression de tous les objectifs actifs.
-- Une liste des objectifs actifs avec un **mini-cercle de progression** pour chacun.
+Le tableau de bord affiche 4 indicateurs clés colorés distinctement (Orange, Vert, Jaune, Bleu) :
+- **Objectifs actifs**, **Objectifs terminés**, **Meilleure série**, et **Progression globale**.
+- Liste des objectifs actifs cliquables avec un **mini-cercle de progression** pour chacun.
 
 ### Notifications locales
-- Rappels quotidiens configurables depuis l'écran des Réglages.
-- Rappels spécifiques : possiblité de définir une date et heure précise de rappel pour un objectif donné.
-- Messages contextuels :
-  - Message neutre si pas de streak : _"Tu avais prévu d'avancer sur tes objectifs aujourd'hui."_
-  - Message motivant si streak actif : _"Continue comme ça, tu es sur une belle série !"_
-- Utilise `UNUserNotificationCenter` (notifications 100% locales, aucun serveur).
+- Rappels quotidiens configurables et rappels spécifiques par objectif.
+- Messages contextuels motivants basés sur vos streaks.
+- Utilise `UNUserNotificationCenter` (100% locales, aucun serveur).
 
-### Localisation (FR / EN)
+### Localisation
 - L'application est **entièrement traduite en français et en anglais**.
-- Elle s'adapte automatiquement à la langue système de l'appareil (via `Localizable.xcstrings`).
 
 ---
 
@@ -57,13 +44,13 @@ Le tableau de bord affiche 4 indicateurs clés :
 
 | # | Écran | Description |
 |---|-------|-------------|
-| 1 | **Statistiques** | Dashboard avec 4 cartes de stats colorées distinctement (objectifs actifs [orange], terminés [vert], meilleur streak [jaune], progression [bleu]) et liste détaillée des objectifs actifs avec mini-anneaux de progression. |
-| 2 | **Accueil** | Liste de tous les objectifs avec filtre segmenté (Actifs / Terminés / Archivés), barre de recherche, et bouton "+" pour créer un nouvel objectif. |
-| 3 | **Détail objectif** | Affiche le titre, la description, la date limite, le type de répétition, un cercle de progression animé, le streak, la checklist d'étapes cochables, et un bouton "Fait aujourd'hui" pour les objectifs récurrents, avec option de désarchivage si archivé. |
-| 4 | **Formulaire** | Création ou édition d'un objectif : nom, description, toggle de date limite avec sélection de date et heure, rappel spécifique, choix de répétition, et gestion dynamique des étapes. |
-| 5 | **Réglages** | Activation/désactivation des notifications, sélection de l'heure du rappel quotidien, et version de l'app. |
+| 1 | **Statistiques** | Dashboard avec 4 cartes de stats colorées et liste détaillée des objectifs actifs. |
+| 2 | **Accueil** | Liste de tous les objectifs avec filtre segmenté (Actifs / Terminés / Archivés) et barre de recherche. |
+| 3 | **Détail objectif** | Vue complète d'un objectif, sa progression, son historique et la checklist d'étapes. |
+| 4 | **Formulaire** | Interface fluide de création ou édition, avec options de temps façon Apple natives. |
+| 5 | **Réglages** | Préférences utilisateur, horaires de notifications. |
 
-La navigation se fait via une **barre d'onglets (Tab Bar)** en bas de l'écran avec 3 onglets ordonnés comme suit : Stats, Accueil, Réglages.
+La navigation se fait via une **barre d'onglets (Tab Bar)** avec l'onglet "Accueil" au centre, encadré par "Stats" et "Réglages".
 
 ---
 
@@ -71,72 +58,26 @@ La navigation se fait via une **barre d'onglets (Tab Bar)** en bas de l'écran a
 
 ### Stack
 - **SwiftUI** — Interface utilisateur déclarative
-- **SwiftData** — Stockage local persistant (basé sur CoreData)
+- **SwiftData** — Stockage local persistant (optimisé O(1) rendering)
 - **MVVM** — Architecture Model-View-ViewModel
-- **UserNotifications** — Notifications locales iOS
 - **iOS 17+** — Deployment target
 
 ### Structure du projet
 ```
 momentum/
-├── momentumApp.swift              ← Point d'entrée de l'app
+├── momentumApp.swift              ← Point d'entrée de l'app (SwiftData Container Model)
 ├── Localizable.xcstrings          ← Traductions FR / EN
 ├── Models/
-│   ├── Goal.swift                 ← Modèle principal (objectif)
-│   ├── GoalStep.swift             ← Sous-étape d'un objectif
-│   ├── GoalHistory.swift          ← Historique de complétion quotidienne
-│   ├── GoalRepetition.swift       ← Enum : aucun / quotidien / hebdomadaire
-│   └── GoalStatus.swift           ← Enum : actif / terminé / archivé
+│   └── Goal, GoalStep, GoalHistory, etc.
 ├── ViewModels/
-│   ├── GoalListViewModel.swift    ← Logique de la liste d'accueil
-│   ├── GoalDetailViewModel.swift  ← Logique du détail d'un objectif
-│   ├── GoalFormViewModel.swift    ← Logique du formulaire
-│   ├── StatsViewModel.swift       ← Calcul des statistiques
-│   └── SettingsViewModel.swift    ← Préférences de notifications
+│   └── Listes, Détails, Formulaires, Stats et Réglages
 ├── Views/
 │   ├── MainTabView.swift          ← Barre d'onglets
-│   ├── Home/
-│   │   ├── HomeView.swift         ← Écran d'accueil
-│   │   └── GoalRowView.swift      ← Ligne d'un objectif dans la liste
-│   ├── Detail/
-│   │   ├── GoalDetailView.swift   ← Écran de détail
-│   │   └── StepRowView.swift      ← Ligne d'une étape
-│   ├── Form/
-│   │   └── GoalFormView.swift     ← Formulaire de création/édition
-│   ├── Stats/
-│   │   ├── StatsView.swift        ← Dashboard des statistiques
-│   │   └── StatCardView.swift     ← Carte de statistique
-│   └── Settings/
-│       └── SettingsView.swift     ← Écran des réglages
+│   └── (Sous-dossiers Home, Detail, Form, Stats, Settings)
 ├── Services/
-│   └── NotificationService.swift  ← Service de notifications locales
+│   └── NotificationService.swift  ← Notifications locales iOS
 └── Extensions/
-    └── Color+Theme.swift          ← Palette de couleurs de l'app
-```
-
-### Modèles de données (SwiftData)
-```
-Goal (Objectif)
-├── title: String
-├── goalDescription: String
-├── createdAt: Date
-├── deadline: Date? (optionnel, avec heure)
-├── repetitionRaw: String → GoalRepetition enum
-├── statusRaw: String → GoalStatus enum
-├── steps: [GoalStep] (relation cascade)
-├── history: [GoalHistory] (relation cascade)
-├── progress: Double (calculé automatiquement)
-├── currentStreak: Int (calculé automatiquement)
-└── isCompletedToday: Bool (calculé automatiquement)
-
-GoalStep (Étape)
-├── title: String
-├── isCompleted: Bool
-└── order: Int
-
-GoalHistory (Historique)
-├── date: Date (normalisée au début du jour)
-└── completed: Bool
+    └── Color+Theme.swift          ← Couleurs natives (Apple System Blue)
 ```
 
 ---
@@ -150,37 +91,25 @@ GoalHistory (Historique)
 | Authentification | Aucune |
 | Widgets iOS | Non implémenté |
 | Apple Watch | Non implémenté |
-| Dark mode personnalisé | Fonctionne via les couleurs système iOS (automatic) |
-| Répétition custom (jours spécifiques) | Limité à aucun / quotidien / hebdomadaire |
 | Export de données | Non implémenté |
-| Gamification avancée (badges, niveaux, XP) | Non — uniquement les streaks |
-| Haptic feedback | Non implémenté |
-| Onboarding / tutoriel | Non implémenté |
-| iPad layout optimisé | Fonctionne mais pas optimisé avec split view |
+| Gamification avancée | Limité aux Streaks et pourcentages |
 
 ---
 
-## Prérequis
+## Prérequis et Installation
 
-- **Xcode 15+** (Xcode 26 recommandé)
+- **Xcode 15+**
 - **iOS 17+** (iPhone ou simulateur)
-- Un compte Apple Developer (gratuit) pour le code signing
 
-## Installation
-
-1. Cloner le dépôt :
-   ```bash
-   git clone https://github.com/axel-g-dev/momentum.git
-   ```
+1. Cloner le dépôt : `git clone https://github.com/axel-g-dev/momentum.git`
 2. Ouvrir `momentum.xcodeproj` dans Xcode.
-3. Sélectionner ta **Development Team** dans Signing & Capabilities.
-4. Choisir un simulateur iPhone ou un appareil physique.
-5. Appuyer sur **⌘R** pour lancer l'application.
+3. Sélectionner la **Development Team** dans Signing & Capabilities.
+4. Appuyer sur **⌘R** pour lancer l'application.
 
 ---
 
 ## Version
 
-- **Version actuelle** : 1.0.3
+- **Version actuelle** : 1.0.4
 - **Deployment target** : iOS 17.0
 - **Langues** : Anglais, Français

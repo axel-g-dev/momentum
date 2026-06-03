@@ -87,12 +87,28 @@ struct GoalFormView: View {
 
             if viewModel.hasDeadline {
                 DatePicker(
-                    String(localized: "form.deadline.date", defaultValue: "Deadline"),
+                    String(localized: "form.deadline.date", defaultValue: "Date"),
                     selection: $viewModel.deadline,
                     in: Date.now...,
-                    displayedComponents: [.date, .hourAndMinute]
+                    displayedComponents: .date
                 )
                 .tint(.accentOcean)
+
+                Toggle(
+                    String(localized: "form.time.toggle", defaultValue: "Time"),
+                    isOn: $viewModel.hasDeadlineTime.animation()
+                )
+                .tint(.accentOcean)
+
+                if viewModel.hasDeadlineTime {
+                    DatePicker(
+                        String(localized: "form.deadline.time", defaultValue: "Time"),
+                        selection: $viewModel.deadline,
+                        in: Date.now...,
+                        displayedComponents: .hourAndMinute
+                    )
+                    .tint(.accentOcean)
+                }
             }
         }
     }
@@ -109,12 +125,28 @@ struct GoalFormView: View {
 
             if viewModel.hasReminder {
                 DatePicker(
-                    String(localized: "form.reminder.date", defaultValue: "Reminder time"),
+                    String(localized: "form.reminder.date", defaultValue: "Date"),
                     selection: $viewModel.reminderDate,
                     in: Date.now...,
-                    displayedComponents: [.date, .hourAndMinute]
+                    displayedComponents: .date
                 )
                 .tint(.accentOcean)
+
+                Toggle(
+                    String(localized: "form.time.toggle", defaultValue: "Time"),
+                    isOn: $viewModel.hasReminderTime.animation()
+                )
+                .tint(.accentOcean)
+
+                if viewModel.hasReminderTime {
+                    DatePicker(
+                        String(localized: "form.reminder.time", defaultValue: "Time"),
+                        selection: $viewModel.reminderDate,
+                        in: Date.now...,
+                        displayedComponents: .hourAndMinute
+                    )
+                    .tint(.accentOcean)
+                }
             }
         }
     }
