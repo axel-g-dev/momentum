@@ -18,6 +18,11 @@ final class GoalFormViewModel {
     var reminderDate: Date = Calendar.current.date(byAdding: .day, value: 1, to: .now) ?? .now
     var repetition: GoalRepetition = .none
     var stepInputs: [StepInput] = [StepInput(title: "")]
+    
+    // New Categorization & Priority support
+    var category: GoalCategory? = nil
+    var priority: GoalPriority = .medium
+    var parentGoal: Goal? = nil
 
     var isValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -31,15 +36,29 @@ final class GoalFormViewModel {
         title = goal.title
         goalDescription = goal.goalDescription
         hasDeadline = goal.deadline != nil
-        // Apple style: if time is at 23:59:00 exactly, it was an all day event usually, 
-        // but here let's just default to true if they set it. Or since we didn't track it before, default to true.
         hasDeadlineTime = true
         deadline = goal.deadline ?? Calendar.current.date(byAdding: .weekOfYear, value: 1, to: .now) ?? .now
         hasReminder = goal.reminderDate != nil
         hasReminderTime = true
         reminderDate = goal.reminderDate ?? Calendar.current.date(byAdding: .day, value: 1, to: .now) ?? .now
         repetition = goal.repetition
+        category = goal.category
+        priority = goal.priority
+        parentGoal = goal.parent
+        
         stepInputs = goal.sortedSteps.map { StepInput(title: $0.title) }
+        if stepInputs.isEmpty {
+            stepInputs = [StepInput(title: "")]
+        }
+    }
+
+    func loadTemplate(_ template: GoalTemplate) {
+        title = template.title
+        goalDescription = template.description
+        category = template.category
+        priority = template.priority
+        repetition = template.repetition
+        stepInputs = template.steps.map { StepInput(title: $0) }
         if stepInputs.isEmpty {
             stepInputs = [StepInput(title: "")]
         }
@@ -57,7 +76,6 @@ final class GoalFormViewModel {
     }
 
     func saveNewGoal(context: ModelContext) {
-        // If no time is specified, we can set deadline to end of day and reminder to 9 AM
         let finalDeadline = hasDeadline ? (hasDeadlineTime ? deadline : endOfDay(for: deadline)) : nil
         let finalReminder = hasReminder ? (hasReminderTime ? reminderDate : defaultReminderTime(for: reminderDate)) : nil
 
@@ -66,7 +84,10 @@ final class GoalFormViewModel {
             goalDescription: goalDescription.trimmingCharacters(in: .whitespacesAndNewlines),
             deadline: finalDeadline,
             reminderDate: finalReminder,
-            repetition: repetition
+            repetition: repetition,
+            category: category,
+            priority: priority,
+            parent: parentGoal
         )
 
         for (index, stepTitle) in nonEmptyStepTitles.enumerated() {
@@ -75,6 +96,10 @@ final class GoalFormViewModel {
         }
 
         context.insert(goal)
+        
+        if let parentGoal {
+            parentGoal.subGoals.append(goal)
+        }
         
         if hasReminder {
             NotificationService.shared.scheduleGoalReminder(for: goal)
@@ -92,6 +117,8 @@ final class GoalFormViewModel {
         goal.deadline = finalDeadline
         goal.reminderDate = finalReminder
         goal.repetition = repetition
+        goal.category = category
+        goal.priority = priority
 
         // Remove old steps
         for step in goal.steps {
