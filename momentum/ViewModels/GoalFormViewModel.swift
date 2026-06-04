@@ -52,7 +52,7 @@ final class GoalFormViewModel {
     }
 
     func removeStep(at index: Int) {
-        guard stepInputs.count > 1 else { return }
+        guard index >= 0 && index < stepInputs.count else { return }
         stepInputs.remove(at: index)
         HapticManager.shared.impact(style: .light)
     }

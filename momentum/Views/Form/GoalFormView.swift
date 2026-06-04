@@ -170,35 +170,34 @@ struct GoalFormView: View {
 
     private var stepsSection: some View {
         Section {
-            let list = viewModel.stepInputs
-            ForEach(Array(list.enumerated()), id: \.element.id) { index, input in
-                HStack {
-                    Image(systemName: "circle")
-                        .foregroundStyle(Color(.systemGray3))
-                        .font(.body)
+            ForEach(viewModel.stepInputs) { input in
+                if let index = viewModel.stepInputs.firstIndex(where: { $0.id == input.id }) {
+                    HStack {
+                        Image(systemName: "circle")
+                            .foregroundStyle(Color(.systemGray3))
+                            .font(.body)
 
-                    TextField(
-                        String(localized: "form.step.placeholder", defaultValue: "Step \(index + 1)"),
-                        text: $viewModel.stepInputs[index].title
-                    )
-                    .focused($focusedStepIndex, equals: index)
-                    .onSubmit {
-                        if index == list.count - 1 {
-                            viewModel.addStep()
-                            focusedStepIndex = index + 1
-                        } else {
-                            focusedStepIndex = index + 1
+                        TextField(
+                            String(localized: "form.step.placeholder", defaultValue: "Step \(index + 1)"),
+                            text: $viewModel.stepInputs[index].title
+                        )
+                        .focused($focusedStepIndex, equals: index)
+                        .onSubmit {
+                            if index == viewModel.stepInputs.count - 1 {
+                                viewModel.addStep()
+                                focusedStepIndex = index + 1
+                            } else {
+                                focusedStepIndex = index + 1
+                            }
                         }
-                    }
 
-                    if list.count > 1 {
                         Button {
                             withAnimation {
                                 viewModel.removeStep(at: index)
                             }
                         } label: {
                             Image(systemName: "minus.circle.fill")
-                                .foregroundStyle(.destructive)
+                                .foregroundStyle(.red)
                         }
                         .buttonStyle(.plain)
                     }
