@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import UIKit
 
 @Observable
 final class GoalDetailViewModel {

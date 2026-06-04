@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import UIKit
 
 struct StepInput: Identifiable, Equatable {
     let id = UUID()
