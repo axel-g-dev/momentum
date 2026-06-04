@@ -2,7 +2,7 @@
 
 **Application iOS de productivité et de motivation personnelle.**
 
-momentum te permet de créer des objectifs, suivre leur progression, maintenir des séries de jours consécutifs (streaks) et recevoir des rappels quotidiens pour rester discipliné. L'app est conçue avec un design minimaliste inspiré des applications natives Apple.
+momentum te permet de créer des objectifs, suivre leur progression, maintenir des séries de jours consécutifs (streaks) et recevoir des rappels pour rester discipliné. L'app est conçue avec un design minimaliste et premium inspiré des applications natives Apple.
 
 ---
 
@@ -15,9 +15,29 @@ momentum te permet de créer des objectifs, suivre leur progression, maintenir d
 - **Archiver / Désarchiver** : Gardez l'historique de vos objectifs sans encombrer la vue principale.
 - **Supprimer** un objectif avec confirmation (action irréversible).
 
+### Swipe Actions (Gestes de glissement)
+- Glissez vers la **droite** (leading) pour marquer instantanément un objectif comme **"fait aujourd'hui"** ou annuler la complétion du jour (avec vibration haptique).
+- Glissez vers la **gauche** (trailing) pour **archiver** ou **supprimer** rapidement un objectif.
+
+### Catégories et Tags
+- Classez vos objectifs par catégorie : **Sport 🏃, Travail 💼, Santé 🧘, Perso 🎯** avec des couleurs et icônes SF Symbols dédiées.
+- Filtrez instantanément vos objectifs sur la page d'accueil à l'aide d'une **barre de filtres horizontaux** fluide (pills).
+
+### Priorités et Tri Automatique
+- Définissez un niveau de priorité (**Haute / Moyenne / Basse**).
+- Affichage d'indicateurs de priorité Apple-like (`!`, `!!`, `!!!`) colorés à côté du titre.
+- **Tri automatique intelligent** : Les objectifs de haute priorité s'affichent automatiquement en premier sur l'écran d'accueil.
+
+### Templates d'objectifs (Onboarding)
+- Lancez-vous instantanément grâce à des modèles pré-remplis populaires ("Lire 30 min/jour", "Méditer", "Faire du sport 3x/semaine", "Deep Work") affichés de façon interactive dans l'état vide et disponibles à la création d'objectifs.
+
+### Sous-objectifs (Structure hiérarchique)
+- Créez des **sous-objectifs récursifs** au lieu de simples étapes textuelles.
+- Chaque objectif peut avoir ses propres sous-objectifs, ouvrant un lien de navigation vers leur propre fiche de détail.
+- **Calcul de progression intelligent** : La progression du parent est la moyenne combinée de ses étapes et de la progression de ses sous-objectifs.
+
 ### Étapes (checklist)
-- Chaque objectif peut contenir des **sous-étapes** dynamiques.
-- La **progression est calculée automatiquement** en pourcentage à partir des étapes cochées.
+- Chaque objectif ou sous-objectif peut contenir des **sous-étapes** dynamiques.
 - Animations fluides des barres et cercles de progression.
 
 ### Streaks (séries)
@@ -27,12 +47,13 @@ momentum te permet de créer des objectifs, suivre leur progression, maintenir d
 
 ### Statistiques (Dashboard)
 Le tableau de bord affiche 4 indicateurs clés colorés distinctement (Orange, Vert, Jaune, Bleu) :
-- **Objectifs actifs**, **Objectifs terminés**, **Meilleure série**, et **Progression globale**.
+- **Objectifs actifs**, **Objectifs terminés**, **Meilleure série**, et **Progression globale** (basés uniquement sur les objectifs de premier niveau).
 - Liste des objectifs actifs cliquables avec un **mini-cercle de progression** pour chacun.
 
-### Notifications locales
+### Notifications locales et Temps Réel
 - Rappels quotidiens configurables et rappels spécifiques par objectif.
 - Messages contextuels motivants basés sur vos streaks.
+- **Notifications au premier plan** : Conformation à `UNUserNotificationCenterDelegate` pour afficher des bannières de notifications animées avec son même si l'application est activement ouverte.
 - Utilise `UNUserNotificationCenter` (100% locales, aucun serveur).
 
 ### Localisation
@@ -49,9 +70,9 @@ Le tableau de bord affiche 4 indicateurs clés colorés distinctement (Orange, V
 | # | Écran | Description |
 |---|-------|-------------|
 | 1 | **Statistiques** | Dashboard avec 4 cartes de stats colorées et liste détaillée des objectifs actifs. |
-| 2 | **Accueil** | Liste de tous les objectifs avec filtre segmenté (Actifs / Terminés / Archivés) et barre de recherche. |
-| 3 | **Détail objectif** | Vue complète d'un objectif, sa progression, son historique et la checklist d'étapes. |
-| 4 | **Formulaire** | Interface fluide de création ou édition, avec options de temps façon Apple natives. |
+| 2 | **Accueil** | Liste de tous les objectifs filtrables par statut (Actifs / Terminés / Archivés) et catégorie, avec swipe actions et barre de recherche. |
+| 3 | **Détail objectif** | Vue complète d'un objectif, badges de détails, progression, sous-objectifs reliés, et checklist d'étapes. |
+| 4 | **Formulaire** | Interface fluide de création ou édition, sélecteurs de catégorie, priorité et dates. |
 | 5 | **Réglages** | Préférences utilisateur, horaires de notifications. |
 
 La navigation se fait via une **barre d'onglets (Tab Bar)** avec l'onglet "Accueil" au centre, encadré par "Stats" et "Réglages".
@@ -69,17 +90,22 @@ La navigation se fait via une **barre d'onglets (Tab Bar)** avec l'onglet "Accue
 ### Structure du projet
 ```
 momentum/
-├── momentumApp.swift              ← Point d'entrée de l'app (SwiftData Container Model)
+├── momentumApp.swift              ← Point d'entrée de l'app (SwiftData Container Model et Notification Delegate)
 ├── Localizable.xcstrings          ← Traductions FR / EN
 ├── Models/
-│   └── Goal, GoalStep, GoalHistory, etc.
+│   ├── Goal.swift                 ← Modèle principal avec relations sous-objectifs
+│   ├── GoalStep.swift
+│   ├── GoalHistory.swift
+│   ├── GoalCategory.swift         ← Nouveau : Sport, Travail, Santé, Perso
+│   ├── GoalPriority.swift         ← Nouveau : Basse, Moyenne, Haute
+│   └── GoalTemplate.swift         ← Nouveau : Modèles pré-remplis
 ├── ViewModels/
 │   └── Listes, Détails, Formulaires, Stats et Réglages
 ├── Views/
 │   ├── MainTabView.swift          ← Barre d'onglets
 │   └── (Sous-dossiers Home, Detail, Form, Stats, Settings)
 ├── Services/
-│   └── NotificationService.swift  ← Notifications locales iOS
+│   └── NotificationService.swift  ← Notifications locales iOS (Bannières foreground)
 └── Extensions/
     └── Color+Theme.swift          ← Couleurs natives (Apple System Blue)
 ```
