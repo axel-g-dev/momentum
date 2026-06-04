@@ -30,6 +30,16 @@ struct MomentumApp: App {
         }
     }()
 
+    init() {
+        // Set the notification center delegate for foreground notifications
+        UNUserNotificationCenter.current().delegate = NotificationService.shared
+
+        // Request permissions proactively at startup
+        Task {
+            _ = await NotificationService.shared.requestPermission()
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             MainTabView()
