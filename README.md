@@ -60,7 +60,7 @@ La navigation se fait via une **barre d'onglets (Tab Bar)** avec l'onglet "Accue
 - **SwiftUI** — Interface utilisateur déclarative
 - **SwiftData** — Stockage local persistant (optimisé O(1) rendering)
 - **MVVM** — Architecture Model-View-ViewModel
-- **iOS 17+** — Deployment target
+- **iOS 18+** — Deployment target
 
 ### Structure du projet
 ```
@@ -99,7 +99,7 @@ momentum/
 ## Prérequis et Installation
 
 - **Xcode 15+**
-- **iOS 17+** (iPhone ou simulateur)
+- **iOS 18+** (iPhone ou simulateur)
 
 1. Cloner le dépôt : `git clone https://github.com/axel-g-dev/momentum.git`
 2. Ouvrir `momentum.xcodeproj` dans Xcode.
@@ -111,5 +111,5 @@ momentum/
 ## Version
 
 - **Version actuelle** : 1.0.4
-- **Deployment target** : iOS 17.0
+- **Deployment target** : iOS 18.0
 - **Langues** : Anglais, Français
