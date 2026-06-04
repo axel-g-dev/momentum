@@ -79,14 +79,14 @@ struct SettingsView: View {
             HStack {
                 Text(String(localized: "settings.version", defaultValue: "Version"))
                 Spacer()
-                Text("1.0.3")
+                Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "–")
                     .foregroundStyle(.textSecondary)
             }
 
             HStack {
                 Text(String(localized: "settings.build", defaultValue: "Build"))
                 Spacer()
-                Text("1")
+                Text(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "–")
                     .foregroundStyle(.textSecondary)
             }
         } header: {

@@ -49,38 +49,21 @@ final class Goal {
     }
 
     var progress: Double {
-        let total = steps.count
-        guard total > 0 else { return 0 }
-        var completedCount = 0
-        for step in steps {
-            if step.isCompleted {
-                completedCount += 1
-            }
-        }
-        return Double(completedCount) / Double(total)
+        guard !steps.isEmpty else { return 0 }
+        let completedCount = steps.reduce(0) { $0 + ($1.isCompleted ? 1 : 0) }
+        return Double(completedCount) / Double(steps.count)
     }
 
     var isCompletedToday: Bool {
         let today = Calendar.current.startOfDay(for: .now)
-        for entry in history {
-            if entry.completed && entry.date == today {
-                return true
-            }
-        }
-        return false
+        return history.contains { $0.completed && $0.date == today }
     }
 
     var currentStreak: Int {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: .now)
         
-        var completedDates = Set<Date>()
-        for entry in history {
-            if entry.completed {
-                completedDates.insert(entry.date)
-            }
-        }
-        
+        let completedDates = Set(history.compactMap { $0.completed ? $0.date : nil })
         guard !completedDates.isEmpty else { return 0 }
         
         var expectedDate: Date

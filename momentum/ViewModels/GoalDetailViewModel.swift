@@ -1,4 +1,3 @@
-import Foundation
 import SwiftData
 import UIKit
 
@@ -36,9 +35,11 @@ final class GoalDetailViewModel {
 
     func archiveGoal(_ goal: Goal) {
         goal.status = .archived
+        HapticManager.shared.impact(style: .medium)
     }
 
     func unarchiveGoal(_ goal: Goal) {
         goal.status = goal.progress >= 1.0 && goal.repetition == .none ? .completed : .active
+        HapticManager.shared.impact(style: .medium)
     }
 }
