@@ -21,17 +21,21 @@ final class GoalListViewModel {
 
     func deleteGoal(_ goal: Goal, context: ModelContext) {
         context.delete(goal)
+        HapticManager.shared.notification(type: .warning)
     }
 
     func archiveGoal(_ goal: Goal) {
         goal.status = .archived
+        HapticManager.shared.impact(style: .light)
     }
 
     func restoreGoal(_ goal: Goal) {
         goal.status = .active
+        HapticManager.shared.impact(style: .medium)
     }
 
     func completeGoal(_ goal: Goal) {
         goal.status = .completed
+        HapticManager.shared.notification(type: .success)
     }
 }
