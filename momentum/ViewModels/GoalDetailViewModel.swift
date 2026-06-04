@@ -5,6 +5,7 @@ import SwiftData
 final class GoalDetailViewModel {
     func toggleStep(_ step: GoalStep) {
         step.isCompleted.toggle()
+        HapticManager.shared.impact(style: step.isCompleted ? .medium : .light)
     }
 
     func markCompletedToday(_ goal: Goal) {
@@ -16,6 +17,8 @@ final class GoalDetailViewModel {
         if goal.progress >= 1.0 && goal.repetition == .none {
             goal.status = .completed
         }
+        
+        HapticManager.shared.notification(type: .success)
     }
 
     func unmarkCompletedToday(_ goal: Goal) {
@@ -27,6 +30,7 @@ final class GoalDetailViewModel {
 
     func deleteGoal(_ goal: Goal, context: ModelContext) {
         context.delete(goal)
+        HapticManager.shared.notification(type: .warning)
     }
 
     func archiveGoal(_ goal: Goal) {
