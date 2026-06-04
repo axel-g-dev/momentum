@@ -40,7 +40,7 @@ final class NotificationService {
                 String(localized: "notification.reminder.progress", defaultValue: "A small step forward is still progress.")
             ]
 
-            content.title = String(localized: "notification.title", defaultValue: "Momentum")
+            content.title = String(localized: "notification.title", defaultValue: "momentum")
 
             if activeGoal.currentStreak > 2 {
                 content.body = streakMessages.randomElement() ?? streakMessages[0]
@@ -48,7 +48,7 @@ final class NotificationService {
                 content.body = defaultMessages.randomElement() ?? defaultMessages[0]
             }
         } else {
-            content.title = String(localized: "notification.title", defaultValue: "Momentum")
+            content.title = String(localized: "notification.title", defaultValue: "momentum")
             content.body = String(localized: "notification.reminder.default", defaultValue: "Take a moment to review your goals.")
         }
 
@@ -81,7 +81,7 @@ final class NotificationService {
         if reminderDate < .now { return }
 
         let content = UNMutableNotificationContent()
-        content.title = String(localized: "notification.title", defaultValue: "Momentum")
+        content.title = String(localized: "notification.title", defaultValue: "momentum")
         
         let message = String(localized: "notification.reminder.specific", defaultValue: "Reminder: %@")
         content.body = String(format: message, goal.title)

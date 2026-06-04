@@ -1,8 +1,8 @@
-# Momentum
+# momentum
 
 **Application iOS de productivité et de motivation personnelle.**
 
-Momentum te permet de créer des objectifs, suivre leur progression, maintenir des séries de jours consécutifs (streaks) et recevoir des rappels quotidiens pour rester discipliné. L'app est conçue avec un design minimaliste inspiré des applications natives Apple.
+momentum te permet de créer des objectifs, suivre leur progression, maintenir des séries de jours consécutifs (streaks) et recevoir des rappels quotidiens pour rester discipliné. L'app est conçue avec un design minimaliste inspiré des applications natives Apple.
 
 ---
 
@@ -37,6 +37,10 @@ Le tableau de bord affiche 4 indicateurs clés colorés distinctement (Orange, V
 
 ### Localisation
 - L'application est **entièrement traduite en français et en anglais**.
+
+### Design & Expérience (UX)
+- **Vibrations Haptiques** : Retours tangibles et premium (succès, sélection, suppression) via `HapticManager`.
+- **Typographie & Couleurs** : Utilisation exclusive du System Blue d'Apple et police San Francisco pour une intégration parfaite.
 
 ---
 
@@ -112,4 +116,5 @@ momentum/
 
 - **Version actuelle** : 1.0.4
 - **Deployment target** : iOS 18.0
+- **Développeur** : axel'
 - **Langues** : Anglais, Français

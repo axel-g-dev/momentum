@@ -774,13 +774,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Momentum"
+            "value" : "momentum"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Momentum"
+            "value" : "momentum"
           }
         }
       }
@@ -845,6 +845,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "À propos"
+          }
+        }
+      }
+    },
+    "settings.developer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Developer"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Développeur"
           }
         }
       }

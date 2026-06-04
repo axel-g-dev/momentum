@@ -70,6 +70,13 @@ struct SettingsView: View {
     private var aboutSection: some View {
         Section {
             HStack {
+                Text(String(localized: "settings.developer", defaultValue: "Developer"))
+                Spacer()
+                Text("axel'")
+                    .foregroundStyle(.textSecondary)
+            }
+            
+            HStack {
                 Text(String(localized: "settings.version", defaultValue: "Version"))
                 Spacer()
                 Text("1.0.3")
