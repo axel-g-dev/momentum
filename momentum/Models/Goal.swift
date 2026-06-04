@@ -11,6 +11,14 @@ final class Goal {
     var notificationId: String?
     var repetitionRaw: String
     var statusRaw: String
+    var categoryRaw: String?
+    var priorityRaw: String?
+    
+    // Self-referencing recursive relationship for sub-goals
+    var parent: Goal?
+    @Relationship(deleteRule: .cascade, inverse: \Goal.parent)
+    var subGoals: [Goal]
+    
     @Relationship(deleteRule: .cascade, inverse: \GoalStep.goal)
     var steps: [GoalStep]
     @Relationship(deleteRule: .cascade, inverse: \GoalHistory.goal)
@@ -22,7 +30,10 @@ final class Goal {
         deadline: Date? = nil,
         reminderDate: Date? = nil,
         repetition: GoalRepetition = .none,
-        status: GoalStatus = .active
+        status: GoalStatus = .active,
+        category: GoalCategory? = nil,
+        priority: GoalPriority = .medium,
+        parent: Goal? = nil
     ) {
         self.title = title
         self.goalDescription = goalDescription
@@ -32,6 +43,10 @@ final class Goal {
         self.notificationId = UUID().uuidString
         self.repetitionRaw = repetition.rawValue
         self.statusRaw = status.rawValue
+        self.categoryRaw = category?.rawValue
+        self.priorityRaw = priority.rawValue
+        self.parent = parent
+        self.subGoals = []
         self.steps = []
         self.history = []
     }
@@ -48,10 +63,32 @@ final class Goal {
         set { statusRaw = newValue.rawValue }
     }
 
+    var category: GoalCategory? {
+        get {
+            guard let categoryRaw else { return nil }
+            return GoalCategory(rawValue: categoryRaw)
+        }
+        set {
+            categoryRaw = newValue?.rawValue
+        }
+    }
+
+    var priority: GoalPriority {
+        get {
+            guard let priorityRaw else { return .medium }
+            return GoalPriority(rawValue: priorityRaw) ?? .medium
+        }
+        set {
+            priorityRaw = newValue.rawValue
+        }
+    }
+
     var progress: Double {
-        guard !steps.isEmpty else { return 0 }
-        let completedCount = steps.reduce(0) { $0 + ($1.isCompleted ? 1 : 0) }
-        return Double(completedCount) / Double(steps.count)
+        let totalItems = Double(steps.count + subGoals.count)
+        guard totalItems > 0 else { return 0 }
+        let completedSteps = steps.reduce(0.0) { $0 + ($1.isCompleted ? 1.0 : 0.0) }
+        let completedSubGoals = subGoals.reduce(0.0) { $0 + $1.progress }
+        return (completedSteps + completedSubGoals) / totalItems
     }
 
     var isCompletedToday: Bool {
