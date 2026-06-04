@@ -8,9 +8,13 @@ struct GoalFormView: View {
     @FocusState private var focusedStepIndex: Int?
 
     let editingGoal: Goal?
+    let parentGoal: Goal?
+    let initialTemplate: GoalTemplate?
 
-    init(editingGoal: Goal? = nil) {
+    init(editingGoal: Goal? = nil, parentGoal: Goal? = nil, initialTemplate: GoalTemplate? = nil) {
         self.editingGoal = editingGoal
+        self.parentGoal = parentGoal
+        self.initialTemplate = initialTemplate
     }
 
     private var isEditing: Bool { editingGoal != nil }
@@ -24,7 +28,20 @@ struct GoalFormView: View {
     var body: some View {
         NavigationStack {
             Form {
+                if let parentGoal {
+                    Section {
+                        HStack {
+                            Text(String(localized: "form.parentGoal", defaultValue: "Sub-goal of"))
+                                .foregroundStyle(.textSecondary)
+                            Spacer()
+                            Text(parentGoal.title)
+                                .fontWeight(.medium)
+                                .foregroundStyle(.accentOcean)
+                        }
+                    }
+                }
                 basicInfoSection
+                categorizationSection
                 deadlineSection
                 reminderSection
                 repetitionSection
@@ -50,6 +67,12 @@ struct GoalFormView: View {
             .onAppear {
                 if let editingGoal {
                     viewModel.loadGoal(editingGoal)
+                } else if let initialTemplate {
+                    viewModel.loadTemplate(initialTemplate)
+                }
+                
+                if let parentGoal {
+                    viewModel.parentGoal = parentGoal
                 }
             }
         }
@@ -72,6 +95,47 @@ struct GoalFormView: View {
             )
             .lineLimit(3...6)
             .font(.body)
+        }
+    }
+
+    // MARK: - Categorization & Priority
+
+    private var categorizationSection: some View {
+        Section {
+            Picker(
+                String(localized: "form.category", defaultValue: "Category"),
+                selection: $viewModel.category
+            ) {
+                Text(String(localized: "form.category.none", defaultValue: "None")).tag(nil as GoalCategory?)
+                ForEach(GoalCategory.allCases) { cat in
+                    HStack {
+                        Text(cat.emoji)
+                            .padding(.trailing, 4)
+                        Text(cat.displayName)
+                    }
+                    .tag(cat as GoalCategory?)
+                }
+            }
+            .tint(.accentOcean)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text(String(localized: "form.priority", defaultValue: "Priority"))
+                    .font(.subheadline)
+                    .foregroundStyle(.textSecondary)
+                
+                Picker(
+                    String(localized: "form.priority", defaultValue: "Priority"),
+                    selection: $viewModel.priority
+                ) {
+                    ForEach(GoalPriority.allCases) { prio in
+                        Text(prio.displayName).tag(prio)
+                    }
+                }
+                .pickerStyle(.segmented)
+            }
+            .padding(.vertical, 4)
+        } header: {
+            Text(String(localized: "form.categorization.header", defaultValue: "Details"))
         }
     }
 
