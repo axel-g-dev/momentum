@@ -47,11 +47,13 @@ final class GoalFormViewModel {
 
     func addStep() {
         stepInputs.append(StepInput(title: ""))
+        HapticManager.shared.selection()
     }
 
     func removeStep(at index: Int) {
         guard stepInputs.count > 1 else { return }
         stepInputs.remove(at: index)
+        HapticManager.shared.impact(style: .light)
     }
 
     func saveNewGoal(context: ModelContext) {
@@ -77,6 +79,8 @@ final class GoalFormViewModel {
         if hasReminder {
             NotificationService.shared.scheduleGoalReminder(for: goal)
         }
+        
+        HapticManager.shared.notification(type: .success)
     }
 
     func updateGoal(_ goal: Goal, context: ModelContext) {
@@ -106,6 +110,8 @@ final class GoalFormViewModel {
         } else {
             NotificationService.shared.cancelGoalReminder(for: goal)
         }
+        
+        HapticManager.shared.notification(type: .success)
     }
 
     private func endOfDay(for date: Date) -> Date {
