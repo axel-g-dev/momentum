@@ -82,13 +82,34 @@ final class NotificationService {
 
         let content = UNMutableNotificationContent()
         content.title = String(localized: "notification.title", defaultValue: "momentum")
-        
-        let message = String(localized: "notification.reminder.specific", defaultValue: "Reminder: %@")
-        content.body = String(format: message, goal.title)
         content.sound = .default
 
-        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: reminderDate)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        // Motivational messages with goal name — Apple style
+        let goalTitle = goal.title
+        let messages = [
+            String(format: String(localized: "notification.goal.push", defaultValue: "Time to work on \"%@\". Let's go!"), goalTitle),
+            String(format: String(localized: "notification.goal.encourage", defaultValue: "Your goal \"%@\" is waiting for you."), goalTitle),
+            String(format: String(localized: "notification.goal.motivate", defaultValue: "One step closer to \"%@\" — stay focused."), goalTitle),
+            String(format: String(localized: "notification.goal.remind", defaultValue: "Don't forget: \"%@\". You've got this."), goalTitle)
+        ]
+        content.body = messages.randomElement() ?? messages[0]
+
+        // Determine trigger based on repetition type
+        let trigger: UNNotificationTrigger
+        switch goal.repetition {
+        case .daily:
+            // Repeat every day at the same time
+            let components = Calendar.current.dateComponents([.hour, .minute], from: reminderDate)
+            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        case .weekly:
+            // Repeat every week on the same day and time
+            let components = Calendar.current.dateComponents([.weekday, .hour, .minute], from: reminderDate)
+            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        case .none:
+            // One-shot reminder
+            let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: reminderDate)
+            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        }
 
         let identifier: String
         if let existingId = goal.notificationId {

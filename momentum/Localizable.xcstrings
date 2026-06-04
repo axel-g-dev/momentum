@@ -753,6 +753,70 @@
         }
       }
     },
+    "notification.goal.push" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time to work on \"%@\". Let's go!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "C'est le moment de bosser sur \"%@\". Allez !"
+          }
+        }
+      }
+    },
+    "notification.goal.encourage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your goal \"%@\" is waiting for you."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton objectif \"%@\" t'attend."
+          }
+        }
+      }
+    },
+    "notification.goal.motivate" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One step closer to \"%@\" — stay focused."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un pas de plus vers \"%@\" — reste concentré."
+          }
+        }
+      }
+    },
+    "notification.goal.remind" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Don't forget: \"%@\". You've got this."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "N'oublie pas : \"%@\". Tu peux le faire."
+          }
+        }
+      }
+    },
     "notification.streak" : {
       "localizations" : {
         "en" : {
