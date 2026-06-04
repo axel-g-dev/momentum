@@ -7,9 +7,23 @@ struct GoalRowView: View {
         VStack(alignment: .leading, spacing: 8) {
             // Title row
             HStack {
-                Text(goal.title)
-                    .font(.headline)
-                    .foregroundStyle(.textPrimary)
+                HStack(spacing: 6) {
+                    if let category = goal.category {
+                        Image(systemName: category.iconName)
+                            .font(.subheadline)
+                            .foregroundStyle(category.color)
+                    }
+
+                    if goal.priority != .medium {
+                        Text(goal.priority.prioritySymbol)
+                            .font(.subheadline.bold())
+                            .foregroundStyle(goal.priority.color)
+                    }
+
+                    Text(goal.title)
+                        .font(.headline)
+                        .foregroundStyle(.textPrimary)
+                }
 
                 Spacer()
 
