@@ -5,40 +5,114 @@ struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var goals: [Goal]
     @State private var viewModel = GoalListViewModel()
-    @State private var newGoalText = ""
-    @FocusState private var isFocusedOnNewGoal: Bool
+    @State private var showingAddGoal = false
+    @State private var selectedTemplate: GoalTemplate? = nil
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            VStack(spacing: 0) {
-                ScrollView {
-                    VStack(spacing: 16) {
-                        smartListsGrid
-                            .padding(.horizontal)
-                            .padding(.top, 8)
-                        
-                        goalListSection
+        List {
+            // MARK: - Smart Lists Grid
+            Section {
+                smartListsGrid
+            }
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets())
+
+            // MARK: - My Lists / Goals
+            Section {
+                let filtered = viewModel.filteredGoals(from: goals)
+                if filtered.isEmpty {
+                    Text("Aucun objectif dans cette liste.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.vertical, 20)
+                } else {
+                    ForEach(filtered) { goal in
+                        NavigationLink(value: goal) {
+                            GoalRowView(goal: goal) {
+                                if goal.isCompletedToday {
+                                    viewModel.unmarkCompletedToday(goal)
+                                } else {
+                                    viewModel.markCompletedToday(goal)
+                                }
+                            }
+                        }
+                        // Swipe actions
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                viewModel.deleteGoal(goal, context: modelContext)
+                            } label: {
+                                Label("Supprimer", systemImage: "trash")
+                            }
+
+                            if goal.status != .archived {
+                                Button {
+                                    withAnimation { viewModel.archiveGoal(goal) }
+                                } label: {
+                                    Label("Archiver", systemImage: "archivebox")
+                                }
+                                .tint(.orange)
+                            } else {
+                                Button {
+                                    withAnimation { viewModel.restoreGoal(goal) }
+                                } label: {
+                                    Label("Désarchiver", systemImage: "tray.and.arrow.up")
+                                }
+                                .tint(.blue)
+                            }
+                        }
                     }
-                    .padding(.bottom, 80) // Space for bottom bar
+                }
+            } header: {
+                Text("Mes objectifs")
+                    .font(.title3.bold())
+                    .foregroundStyle(.primary)
+                    .textCase(nil)
+            }
+        }
+        .listStyle(.insetGrouped)
+        .navigationTitle("Objectifs")
+        .searchable(text: $viewModel.searchText, prompt: "Rechercher")
+        .toolbar {
+            ToolbarItemGroup(placement: .bottomBar) {
+                Button {
+                    selectedTemplate = nil
+                    showingAddGoal = true
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title3)
+                        Text("Nouvel objectif")
+                            .font(.headline)
+                    }
+                }
+                
+                Spacer()
+                
+                Button("Ajouter liste") {
+                    // Future enhancement: List management
                 }
             }
-            
-            // Fast Add Bar
-            fastAddBar
         }
-        .navigationTitle(String(localized: "home.title", defaultValue: "Mes objectifs"))
-        .background(Color(.systemGroupedBackground))
+        .sheet(isPresented: $showingAddGoal) {
+            GoalFormView(editingGoal: nil, parentGoal: nil, initialTemplate: selectedTemplate)
+        }
     }
 
     // MARK: - Smart Lists
 
     private var smartListsGrid: some View {
-        HStack(spacing: 12) {
+        let columns = [
+            GridItem(.flexible(), spacing: 16),
+            GridItem(.flexible(), spacing: 16)
+        ]
+        
+        return LazyVGrid(columns: columns, spacing: 16) {
             smartListCard(
-                title: "Tous",
-                icon: "tray",
-                color: .gray,
-                count: goals.count,
+                title: "Aujourd'hui",
+                icon: "calendar",
+                color: .blue,
+                count: goals.filter { $0.status == .active }.count,
                 isSelected: viewModel.selectedFilter == .active && viewModel.selectedCategoryFilter == nil
             ) {
                 withAnimation {
@@ -46,137 +120,75 @@ struct HomeView: View {
                     viewModel.selectedCategoryFilter = nil
                 }
             }
-
-            smartListCard(
-                title: "Aujourd'hui",
-                icon: "calendar",
-                color: .blue,
-                count: goals.filter { $0.status == .active }.count, // Simplified count for active goals today
-                isSelected: viewModel.selectedFilter == .active // We could add a 'today' filter, for now active is fine
-            ) {
-                withAnimation {
-                    viewModel.selectedFilter = .active
-                }
-            }
             
             smartListCard(
                 title: "Terminés",
                 icon: "checkmark",
-                color: .green,
+                color: .gray,
                 count: goals.filter { $0.status == .completed }.count,
                 isSelected: viewModel.selectedFilter == .completed
             ) {
                 withAnimation {
                     viewModel.selectedFilter = .completed
+                    viewModel.selectedCategoryFilter = nil
+                }
+            }
+            
+            smartListCard(
+                title: "Tous",
+                icon: "tray",
+                color: .gray,
+                count: goals.count,
+                isSelected: false // Only selected when actively filtering all, but "Aujourd'hui" acts as our main view
+            ) {
+                withAnimation {
+                    viewModel.selectedFilter = .active
+                    viewModel.selectedCategoryFilter = nil
+                }
+            }
+            
+            smartListCard(
+                title: "Archivés",
+                icon: "archivebox",
+                color: .orange,
+                count: goals.filter { $0.status == .archived }.count,
+                isSelected: viewModel.selectedFilter == .archived
+            ) {
+                withAnimation {
+                    viewModel.selectedFilter = .archived
                 }
             }
         }
+        .padding(.horizontal)
+        .padding(.bottom, 8)
     }
 
     private func smartListCard(title: String, icon: String, color: Color, count: Int, isSelected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: 8) {
-                HStack {
+                HStack(alignment: .top) {
                     Image(systemName: icon)
-                        .font(.title3)
-                        .foregroundStyle(color)
-                        .padding(8)
-                        .background(color.opacity(0.15), in: Circle())
+                        .font(.title2.weight(.medium))
+                        .foregroundStyle(.white)
+                        .frame(width: 36, height: 36)
+                        .background(color, in: Circle())
+                    
                     Spacer()
+                    
                     Text("\(count)")
-                        .font(.title2.bold())
-                        .foregroundStyle(.primary)
+                        .font(.title.bold())
+                        .foregroundStyle(isSelected ? .white : .primary)
                 }
+                
                 Text(title)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .font(.headline)
+                    .foregroundStyle(isSelected ? .white : .secondary)
             }
             .padding(12)
-            .background(Color(.secondarySystemGroupedBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(isSelected ? color : Color.clear, lineWidth: 2)
-            )
+            .background(isSelected ? color : Color(uiColor: .secondarySystemGroupedBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         }
         .buttonStyle(.plain)
-    }
-
-    // MARK: - Goal List
-
-    private var goalListSection: some View {
-        let filtered = viewModel.filteredGoals(from: goals)
-
-        return VStack(alignment: .leading, spacing: 0) {
-            if filtered.isEmpty {
-                Text("Aucun objectif dans cette liste.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.vertical, 40)
-            } else {
-                VStack(spacing: 0) {
-                    ForEach(Array(filtered.enumerated()), id: \.element.id) { index, goal in
-                        NavigationLink(value: goal) {
-                            GoalRowView(goal: goal)
-                                .padding(.horizontal)
-                        }
-                        .buttonStyle(.plain)
-
-                        if index < filtered.count - 1 {
-                            Divider()
-                                .padding(.leading, 50)
-                        }
-                    }
-                }
-                .background(Color(.secondarySystemGroupedBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .padding(.horizontal)
-            }
-        }
-        .navigationDestination(for: Goal.self) { goal in
-            GoalDetailView(goal: goal)
-        }
-    }
-
-    // MARK: - Fast Add Bar
-
-    private var fastAddBar: some View {
-        VStack(spacing: 0) {
-            Divider()
-            HStack(spacing: 12) {
-                Image(systemName: "circle")
-                    .font(.title2)
-                    .foregroundStyle(.tertiary)
-                
-                TextField("Nouvel objectif...", text: $newGoalText)
-                    .focused($isFocusedOnNewGoal)
-                    .onSubmit {
-                        createFastGoal()
-                    }
-                
-                if !newGoalText.isEmpty {
-                    Button {
-                        createFastGoal()
-                    } label: {
-                        Text("Ajouter")
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.accentOcean)
-                    }
-                }
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 12)
-            .background(.regularMaterial)
-        }
-    }
-
-    private func createFastGoal() {
-        guard !newGoalText.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-        let goal = Goal(title: newGoalText)
-        modelContext.insert(goal)
-        newGoalText = ""
-        isFocusedOnNewGoal = false
     }
 }
 
