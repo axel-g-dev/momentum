@@ -8,28 +8,20 @@ struct GoalDetailView: View {
     @State private var viewModel = GoalDetailViewModel()
     @State private var showingEditSheet = false
     @State private var showingDeleteAlert = false
-    @State private var showingAddSubGoal = false
 
     var body: some View {
         let progress = goal.progress
         let sortedSteps = goal.sortedSteps
-        let sortedSubGoals = goal.subGoals.sorted {
-            if $0.priority != $1.priority {
-                return $0.priority.sortOrder > $1.priority.sortOrder
-            }
-            return $0.createdAt > $1.createdAt
-        }
         
         return ScrollView {
             VStack(spacing: 24) {
                 headerSection
-                if !goal.steps.isEmpty || !goal.subGoals.isEmpty {
+                if !goal.steps.isEmpty {
                     progressSection(progress: progress)
                 }
                 if !goal.steps.isEmpty {
                     stepsSection(sortedSteps: sortedSteps)
                 }
-                subGoalsSection(sortedSubGoals: sortedSubGoals)
             }
             .padding()
         }
@@ -96,9 +88,7 @@ struct GoalDetailView: View {
         .sheet(isPresented: $showingEditSheet) {
             GoalFormView(editingGoal: goal)
         }
-        .sheet(isPresented: $showingAddSubGoal) {
-            GoalFormView(editingGoal: nil, parentGoal: goal)
-        }
+
         .alert(
             String(localized: "detail.delete.title", defaultValue: "Delete Goal"),
             isPresented: $showingDeleteAlert
@@ -275,85 +265,7 @@ struct GoalDetailView: View {
         }
     }
 
-    // MARK: - Sub-goals
 
-    private func subGoalsSection(sortedSubGoals: [Goal]) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text(String(localized: "detail.subgoals", defaultValue: "Sub-goals"))
-                    .font(.headline)
-                    .foregroundStyle(.textPrimary)
-                
-                Spacer()
-                
-                Button {
-                    showingAddSubGoal = true
-                } label: {
-                    Image(systemName: "plus.circle")
-                        .font(.body)
-                        .foregroundStyle(.accentOcean)
-                }
-            }
-
-            if sortedSubGoals.isEmpty {
-                Text(String(localized: "detail.subgoals.empty", defaultValue: "No sub-goals defined."))
-                    .font(.subheadline)
-                    .foregroundStyle(.textTertiary)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.vertical, 20)
-            } else {
-                VStack(spacing: 0) {
-                    ForEach(Array(sortedSubGoals.enumerated()), id: \.element.id) { index, subGoal in
-                        NavigationLink(value: subGoal) {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(subGoal.title)
-                                        .font(.subheadline.weight(.medium))
-                                        .foregroundStyle(.textPrimary)
-
-                                    HStack(spacing: 8) {
-                                        Text(subGoal.priority.displayName)
-                                            .font(.caption2.weight(.semibold))
-                                            .foregroundStyle(subGoal.priority.color)
-                                        
-                                        if let deadline = subGoal.deadline {
-                                            Text("•")
-                                                .font(.caption2)
-                                                .foregroundStyle(.textTertiary)
-                                            Text(deadline, format: .dateTime.day().month())
-                                                .font(.caption2)
-                                                .foregroundStyle(.textSecondary)
-                                        }
-                                    }
-                                }
-
-                                Spacer()
-
-                                Text("\(Int(subGoal.progress * 100))%")
-                                    .font(.caption.weight(.semibold))
-                                    .foregroundStyle(.textSecondary)
-                                
-                                Image(systemName: "chevron.right")
-                                    .font(.caption2)
-                                    .foregroundStyle(Color(.systemGray3))
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 12)
-                            .contentShape(Rectangle())
-                        }
-                        .buttonStyle(.plain)
-
-                        if index < sortedSubGoals.count - 1 {
-                            Divider()
-                                .padding(.leading, 16)
-                        }
-                    }
-                }
-                .background(Color.backgroundSecondary)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-            }
-        }
-    }
 }
 
 #Preview {
