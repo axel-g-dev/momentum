@@ -15,7 +15,7 @@ struct GoalRowView: View {
                         .font(.system(size: 24, weight: .regular))
                         .foregroundStyle(.accentOcean)
                         .frame(width: 24, height: 24)
-                } else if !goal.steps.isEmpty || !goal.subGoals.isEmpty {
+                } else if !goal.steps.isEmpty {
                     circularProgress(progress: goal.progress)
                 } else {
                     Image(systemName: "circle")
