@@ -60,7 +60,13 @@ struct HomeView: View {
                 List {
                     ForEach(filtered) { goal in
                         NavigationLink(value: goal) {
-                            GoalRowView(goal: goal)
+                            GoalRowView(goal: goal) {
+                                if goal.isCompletedToday {
+                                    viewModel.unmarkCompletedToday(goal)
+                                } else {
+                                    viewModel.markCompletedToday(goal)
+                                }
+                            }
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                             Button(role: .destructive) {
