@@ -137,6 +137,10 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
                 // Repeat every week on the same day and time
                 let components = Calendar.current.dateComponents([.weekday, .hour, .minute], from: reminderDate)
                 trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+            case .monthly:
+                // Repeat every month on the same day of the month and time
+                let components = Calendar.current.dateComponents([.day, .hour, .minute], from: reminderDate)
+                trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
             case .none:
                 // One-shot reminder
                 let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: reminderDate)
