@@ -4,7 +4,6 @@ struct GoalTemplate: Identifiable {
     var id: String { title }
     let title: String
     let description: String
-    let category: GoalCategory
     let priority: GoalPriority
     let repetition: GoalRepetition
     let steps: [String]
@@ -15,7 +14,6 @@ extension GoalTemplate {
         GoalTemplate(
             title: String(localized: "template.sport.title", defaultValue: "Work out 3x/week"),
             description: String(localized: "template.sport.desc", defaultValue: "Stay fit and active with regular physical exercise."),
-            category: .sport,
             priority: .high,
             repetition: .weekly,
             steps: [
@@ -27,7 +25,6 @@ extension GoalTemplate {
         GoalTemplate(
             title: String(localized: "template.meditate.title", defaultValue: "Meditate"),
             description: String(localized: "template.meditate.desc", defaultValue: "Practice mindfulness and breathing to improve focus and calm."),
-            category: .health,
             priority: .medium,
             repetition: .daily,
             steps: [
@@ -39,7 +36,6 @@ extension GoalTemplate {
         GoalTemplate(
             title: String(localized: "template.read.title", defaultValue: "Read 30 min/day"),
             description: String(localized: "template.read.desc", defaultValue: "Build a daily reading habit to expand your knowledge."),
-            category: .personal,
             priority: .medium,
             repetition: .daily,
             steps: [
@@ -51,7 +47,6 @@ extension GoalTemplate {
         GoalTemplate(
             title: String(localized: "template.work.title", defaultValue: "Deep Work blocks"),
             description: String(localized: "template.work.desc", defaultValue: "Dedicate uninterrupted blocks of time to high-value projects."),
-            category: .work,
             priority: .high,
             repetition: .daily,
             steps: [
