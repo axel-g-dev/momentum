@@ -19,8 +19,7 @@ final class GoalFormViewModel {
     var repetition: GoalRepetition = .none
     var stepInputs: [StepInput] = [StepInput(title: "")]
     
-    // New Categorization & Priority support
-    var category: GoalCategory? = nil
+    // New Priority support
     var priority: GoalPriority = .medium
     var parentGoal: Goal? = nil
 
@@ -42,7 +41,6 @@ final class GoalFormViewModel {
         hasReminderTime = true
         reminderDate = goal.reminderDate ?? Calendar.current.date(byAdding: .day, value: 1, to: .now) ?? .now
         repetition = goal.repetition
-        category = goal.category
         priority = goal.priority
         parentGoal = goal.parent
         
@@ -55,7 +53,6 @@ final class GoalFormViewModel {
     func loadTemplate(_ template: GoalTemplate) {
         title = template.title
         goalDescription = template.description
-        category = template.category
         priority = template.priority
         repetition = template.repetition
         stepInputs = template.steps.map { StepInput(title: $0) }
@@ -85,7 +82,6 @@ final class GoalFormViewModel {
             deadline: finalDeadline,
             reminderDate: finalReminder,
             repetition: repetition,
-            category: category,
             priority: priority,
             parent: parentGoal
         )
@@ -117,7 +113,6 @@ final class GoalFormViewModel {
         goal.deadline = finalDeadline
         goal.reminderDate = finalReminder
         goal.repetition = repetition
-        goal.category = category
         goal.priority = priority
 
         // Remove old steps
