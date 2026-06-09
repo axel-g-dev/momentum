@@ -11,7 +11,6 @@ final class Goal {
     var notificationId: String?
     var repetitionRaw: String
     var statusRaw: String
-    var categoryRaw: String?
     var priorityRaw: String?
     
 
@@ -28,7 +27,6 @@ final class Goal {
         reminderDate: Date? = nil,
         repetition: GoalRepetition = .none,
         status: GoalStatus = .active,
-        category: GoalCategory? = nil,
         priority: GoalPriority = .medium
     ) {
         self.title = title
@@ -39,7 +37,6 @@ final class Goal {
         self.notificationId = UUID().uuidString
         self.repetitionRaw = repetition.rawValue
         self.statusRaw = status.rawValue
-        self.categoryRaw = category?.rawValue
         self.priorityRaw = priority.rawValue
         self.steps = []
         self.history = []
@@ -57,15 +54,7 @@ final class Goal {
         set { statusRaw = newValue.rawValue }
     }
 
-    var category: GoalCategory? {
-        get {
-            guard let categoryRaw else { return nil }
-            return GoalCategory(rawValue: categoryRaw)
-        }
-        set {
-            categoryRaw = newValue?.rawValue
-        }
-    }
+
 
     var priority: GoalPriority {
         get {
