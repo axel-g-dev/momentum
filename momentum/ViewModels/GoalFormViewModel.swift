@@ -21,7 +21,6 @@ final class GoalFormViewModel {
     
     // New Priority support
     var priority: GoalPriority = .medium
-    var parentGoal: Goal? = nil
 
     var isValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -56,7 +55,6 @@ final class GoalFormViewModel {
         
         repetition = goal.repetition
         priority = goal.priority
-        parentGoal = goal.parent
         
         stepInputs = goal.sortedSteps.map { StepInput(title: $0.title) }
         if stepInputs.isEmpty {
@@ -96,8 +94,7 @@ final class GoalFormViewModel {
             deadline: finalDeadline,
             reminderDate: finalReminder,
             repetition: repetition,
-            priority: priority,
-            parent: parentGoal
+            priority: priority
         )
 
         for (index, stepTitle) in nonEmptyStepTitles.enumerated() {
@@ -107,9 +104,7 @@ final class GoalFormViewModel {
 
         context.insert(goal)
         
-        if let parentGoal {
-            parentGoal.subGoals.append(goal)
-        }
+
         
         if hasReminder {
             NotificationService.shared.scheduleGoalReminder(for: goal)
