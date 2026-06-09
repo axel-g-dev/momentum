@@ -2,59 +2,68 @@ import SwiftUI
 
 struct GoalRowView: View {
     let goal: Goal
+    var onToggle: (() -> Void)? = nil
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            // Title row
-            HStack {
-                HStack(spacing: 6) {
-                    if let category = goal.category {
-                        Image(systemName: category.iconName)
-                            .font(.subheadline)
-                            .foregroundStyle(category.color)
-                    }
+        HStack(alignment: .center, spacing: 12) {
+            // Interactive circle / progress
+            Button {
+                onToggle?()
+            } label: {
+                if goal.isCompletedToday || goal.status == .completed {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(.accentOcean)
+                } else if !goal.steps.isEmpty || !goal.subGoals.isEmpty {
+                    circularProgress(progress: goal.progress)
+                } else {
+                    Image(systemName: "circle")
+                        .font(.title2)
+                        .foregroundStyle(Color(.systemGray4))
+                }
+            }
+            .buttonStyle(.plain)
 
+            VStack(alignment: .leading, spacing: 4) {
+                // Title
+                HStack(spacing: 6) {
                     if goal.priority != .medium {
                         Text(goal.priority.prioritySymbol)
                             .font(.subheadline.bold())
                             .foregroundStyle(goal.priority.color)
                     }
-
                     Text(goal.title)
                         .font(.headline)
-                        .foregroundStyle(.textPrimary)
+                        .foregroundStyle(goal.status == .completed ? .textSecondary : .textPrimary)
+                        .strikethrough(goal.status == .completed)
                 }
 
-                Spacer()
-
-                if goal.currentStreak > 0 {
-                    streakBadge
-                }
-            }
-
-            // Subtitle info
-            HStack(spacing: 12) {
-                if goal.repetition != .none {
-                    Label(goal.repetition.displayName, systemImage: goal.repetition.systemImage)
-                        .font(.caption)
-                        .foregroundStyle(.textSecondary)
-                }
-
-                if let deadline = goal.deadline {
-                    Label {
-                        Text(deadline, format: .dateTime)
-                    } icon: {
-                        Image(systemName: "calendar")
+                // Subtitle metadata
+                HStack(spacing: 8) {
+                    if goal.repetition != .none {
+                        HStack(spacing: 2) {
+                            Image(systemName: goal.repetition.systemImage)
+                            Text(goal.repetition.displayName)
+                        }
                     }
-                    .font(.caption)
-                    .foregroundStyle(goal.isOverdue ? .destructive : .textSecondary)
+
+                    if let deadline = goal.deadline {
+                        HStack(spacing: 2) {
+                            Image(systemName: "calendar")
+                            Text(deadline, format: .dateTime.day().month())
+                        }
+                        .foregroundStyle(goal.isOverdue ? .destructive : .textSecondary)
+                    }
                 }
+                .font(.caption)
+                .foregroundStyle(.textSecondary)
+                .lineLimit(1)
             }
 
-            // Progress bar
-            let progress = goal.progress
-            if !goal.steps.isEmpty {
-                progressBar(progress: progress)
+            Spacer()
+
+            if goal.currentStreak > 0 {
+                streakBadge
             }
         }
         .padding(.vertical, 4)
@@ -75,26 +84,16 @@ struct GoalRowView: View {
         .background(.accentOceanLight, in: Capsule())
     }
 
-    private func progressBar(progress: Double) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            GeometryReader { geometry in
-                ZStack(alignment: .leading) {
-                    Capsule()
-                        .fill(Color(.systemGray5))
-                        .frame(height: 6)
-
-                    Capsule()
-                        .fill(Color.accentOcean)
-                        .frame(width: geometry.size.width * progress, height: 6)
-                        .animation(.spring(duration: 0.4), value: progress)
-                }
-            }
-            .frame(height: 6)
-
-            Text("\(Int(progress * 100))%")
-                .font(.caption2)
-                .foregroundStyle(.textSecondary)
+    private func circularProgress(progress: Double) -> some View {
+        ZStack {
+            Circle()
+                .stroke(Color(.systemGray5), lineWidth: 2.5)
+            Circle()
+                .trim(from: 0, to: progress)
+                .stroke(Color.accentOcean, style: StrokeStyle(lineWidth: 2.5, lineCap: .round))
+                .rotationEffect(.degrees(-90))
         }
+        .frame(width: 26, height: 26)
     }
 }
 
