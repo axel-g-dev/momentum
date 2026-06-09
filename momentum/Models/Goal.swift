@@ -14,10 +14,7 @@ final class Goal {
     var categoryRaw: String?
     var priorityRaw: String?
     
-    // Self-referencing recursive relationship for sub-goals
-    var parent: Goal?
-    @Relationship(deleteRule: .cascade, inverse: \Goal.parent)
-    var subGoals: [Goal]
+
     
     @Relationship(deleteRule: .cascade, inverse: \GoalStep.goal)
     var steps: [GoalStep]
@@ -32,8 +29,7 @@ final class Goal {
         repetition: GoalRepetition = .none,
         status: GoalStatus = .active,
         category: GoalCategory? = nil,
-        priority: GoalPriority = .medium,
-        parent: Goal? = nil
+        priority: GoalPriority = .medium
     ) {
         self.title = title
         self.goalDescription = goalDescription
@@ -45,8 +41,6 @@ final class Goal {
         self.statusRaw = status.rawValue
         self.categoryRaw = category?.rawValue
         self.priorityRaw = priority.rawValue
-        self.parent = parent
-        self.subGoals = []
         self.steps = []
         self.history = []
     }
@@ -84,11 +78,10 @@ final class Goal {
     }
 
     var progress: Double {
-        let totalItems = Double(steps.count + subGoals.count)
+        let totalItems = Double(steps.count)
         guard totalItems > 0 else { return 0 }
         let completedSteps = steps.reduce(0.0) { $0 + ($1.isCompleted ? 1.0 : 0.0) }
-        let completedSubGoals = subGoals.reduce(0.0) { $0 + $1.progress }
-        return (completedSteps + completedSubGoals) / totalItems
+        return completedSteps / totalItems
     }
 
     var isCompletedToday: Bool {
