@@ -27,7 +27,7 @@ struct HomeView: View {
         .sheet(isPresented: $showingAddGoal, onDismiss: {
             selectedTemplate = nil
         }) {
-            GoalFormView(editingGoal: nil, parentGoal: nil, initialTemplate: selectedTemplate)
+            GoalFormView(editingGoal: nil, initialTemplate: selectedTemplate)
         }
         .searchable(
             text: $viewModel.searchText,
