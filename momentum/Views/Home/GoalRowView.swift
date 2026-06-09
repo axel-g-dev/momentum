@@ -29,7 +29,7 @@ struct GoalRowView: View {
             VStack(alignment: .leading, spacing: 4) {
                 // Title
                 HStack(spacing: 6) {
-                    if goal.priority != .medium {
+                    if goal.priority != .low {
                         Text(goal.priority.prioritySymbol)
                             .font(.subheadline.bold())
                             .foregroundStyle(goal.priority.color)
