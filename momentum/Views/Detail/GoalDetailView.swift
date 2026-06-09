@@ -4,363 +4,176 @@ import SwiftData
 struct GoalDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    let goal: Goal
+    @Bindable var goal: Goal
     @State private var viewModel = GoalDetailViewModel()
-    @State private var showingEditSheet = false
-    @State private var showingDeleteAlert = false
-    @State private var showingAddSubGoal = false
+    @State private var newStepTitle = ""
 
     var body: some View {
-        let progress = goal.progress
-        let sortedSteps = goal.sortedSteps
-        let sortedSubGoals = goal.subGoals.sorted {
-            if $0.priority != $1.priority {
-                return $0.priority.sortOrder > $1.priority.sortOrder
+        List {
+            // MARK: - Title and Notes
+            Section {
+                TextField("Titre de l'objectif", text: $goal.title)
+                    .font(.title2.weight(.semibold))
+                
+                TextField("Ajouter des notes...", text: $goal.goalDescription, axis: .vertical)
+                    .lineLimit(2...6)
+                    .foregroundStyle(.secondary)
             }
-            return $0.createdAt > $1.createdAt
-        }
-        
-        return ScrollView {
-            VStack(spacing: 24) {
-                headerSection
-                progressSection(progress: progress)
-                stepsSection(sortedSteps: sortedSteps)
-                subGoalsSection(sortedSubGoals: sortedSubGoals)
-                if goal.repetition != .none {
-                    dailyCompletionSection
+
+            // MARK: - Daily Completion
+            if goal.repetition != .none {
+                Section {
+                    if goal.isCompletedToday {
+                        Button {
+                            withAnimation {
+                                viewModel.unmarkCompletedToday(goal)
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "checkmark.circle.fill")
+                                Text(String(localized: "detail.completed.today", defaultValue: "Completed today"))
+                                Spacer()
+                                Text(String(localized: "detail.undo", defaultValue: "Undo"))
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        .listRowBackground(Color.accentOceanLight.opacity(0.3))
+                        .tint(.accentOcean)
+                    } else {
+                        Button {
+                            withAnimation(.spring(duration: 0.4)) {
+                                viewModel.markCompletedToday(goal)
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "circle")
+                                Text(String(localized: "detail.markdone", defaultValue: "Mark as done today"))
+                            }
+                        }
+                        .tint(.primary)
+                    }
                 }
             }
-            .padding()
+
+            // MARK: - Details / Metadata
+            Section {
+                DatePicker("Date limite", selection: Binding(
+                    get: { goal.deadline ?? .now },
+                    set: { goal.deadline = $0 }
+                ), displayedComponents: .date)
+                
+                Picker("Priorité", selection: $goal.priorityRaw) {
+                    ForEach(GoalPriority.allCases) { prio in
+                        Text(prio.displayName).tag(prio.rawValue as String?)
+                    }
+                }
+                
+                Picker("Répétition", selection: $goal.repetitionRaw) {
+                    ForEach(GoalRepetition.allCases) { rep in
+                        Text(rep.displayName).tag(rep.rawValue)
+                    }
+                }
+                
+                Picker("Catégorie", selection: $goal.categoryRaw) {
+                    Text("Aucune").tag(nil as String?)
+                    ForEach(GoalCategory.allCases) { cat in
+                        Text("\(cat.emoji) \(cat.displayName)").tag(cat.rawValue as String?)
+                    }
+                }
+            } header: {
+                Text("Détails")
+            }
+
+            // MARK: - Checklist / Steps
+            Section {
+                let sortedSteps = goal.sortedSteps
+                ForEach(sortedSteps) { step in
+                    StepRowView(step: step) {
+                        withAnimation(.spring(duration: 0.3)) {
+                            viewModel.toggleStep(step)
+                        }
+                    }
+                }
+                .onDelete { indexSet in
+                    for index in indexSet {
+                        let step = sortedSteps[index]
+                        goal.steps.removeAll { $0.id == step.id }
+                        modelContext.delete(step)
+                    }
+                }
+                
+                HStack {
+                    Image(systemName: "plus.circle")
+                        .foregroundStyle(.tertiary)
+                    TextField("Ajouter une sous-tâche...", text: $newStepTitle)
+                        .onSubmit {
+                            addStep()
+                        }
+                }
+            } header: {
+                Text("Sous-tâches")
+            }
+
+            // MARK: - Subgoals (Legacy Support)
+            if !goal.subGoals.isEmpty {
+                Section {
+                    ForEach(goal.subGoals) { subGoal in
+                        NavigationLink(value: subGoal) {
+                            HStack {
+                                Image(systemName: subGoal.status == .completed ? "checkmark.circle.fill" : "circle")
+                                    .foregroundStyle(subGoal.status == .completed ? .accentOcean : .tertiary)
+                                Text(subGoal.title)
+                                    .strikethrough(subGoal.status == .completed)
+                                    .foregroundStyle(subGoal.status == .completed ? .secondary : .primary)
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Sous-objectifs (Anciens)")
+                }
+            }
         }
-        .background(Color.backgroundPrimary)
-        .navigationTitle(goal.title)
-        .navigationBarTitleDisplayMode(.large)
+        .listStyle(.insetGrouped)
+        .navigationTitle("Détails")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Menu {
-                    Button {
-                        showingEditSheet = true
-                    } label: {
-                        Label(
-                            String(localized: "detail.edit", defaultValue: "Edit"),
-                            systemImage: "pencil"
-                        )
-                    }
-
                     if goal.status == .archived {
                         Button {
                             viewModel.unarchiveGoal(goal)
                             dismiss()
                         } label: {
-                            Label(
-                                String(localized: "detail.unarchive", defaultValue: "Unarchive"),
-                                systemImage: "tray.and.arrow.up"
-                            )
+                            Label(String(localized: "detail.unarchive", defaultValue: "Unarchive"), systemImage: "tray.and.arrow.up")
                         }
                     } else {
                         Button {
                             viewModel.archiveGoal(goal)
                             dismiss()
                         } label: {
-                            Label(
-                                String(localized: "detail.archive", defaultValue: "Archive"),
-                                systemImage: "archivebox"
-                            )
+                            Label(String(localized: "detail.archive", defaultValue: "Archive"), systemImage: "archivebox")
                         }
                     }
 
-                    Divider()
-
                     Button(role: .destructive) {
-                        showingDeleteAlert = true
+                        viewModel.deleteGoal(goal, context: modelContext)
+                        dismiss()
                     } label: {
-                        Label(
-                            String(localized: "detail.delete", defaultValue: "Delete"),
-                            systemImage: "trash"
-                        )
+                        Label(String(localized: "detail.delete", defaultValue: "Delete"), systemImage: "trash")
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
             }
         }
-        .sheet(isPresented: $showingEditSheet) {
-            GoalFormView(editingGoal: goal)
-        }
-        .sheet(isPresented: $showingAddSubGoal) {
-            GoalFormView(editingGoal: nil, parentGoal: goal)
-        }
-        .alert(
-            String(localized: "detail.delete.title", defaultValue: "Delete Goal"),
-            isPresented: $showingDeleteAlert
-        ) {
-            Button(String(localized: "detail.delete.cancel", defaultValue: "Cancel"), role: .cancel) {}
-            Button(String(localized: "detail.delete.confirm", defaultValue: "Delete"), role: .destructive) {
-                viewModel.deleteGoal(goal, context: modelContext)
-                dismiss()
-            }
-        } message: {
-            Text(String(localized: "detail.delete.message", defaultValue: "This action cannot be undone."))
-        }
     }
 
-    // MARK: - Header
-
-    private var headerSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Category & Priority badges
-            HStack(spacing: 8) {
-                if let category = goal.category {
-                    Label(category.displayName, systemImage: category.iconName)
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(category.color)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 5)
-                        .background(category.color.opacity(0.12), in: Capsule())
-                }
-                
-                Label(goal.priority.displayName, systemImage: goal.priority.iconName)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(goal.priority.color)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .background(goal.priority.color.opacity(0.12), in: Capsule())
-            }
-            .padding(.bottom, 4)
-
-            if !goal.goalDescription.isEmpty {
-                Text(goal.goalDescription)
-                    .font(.body)
-                    .foregroundStyle(.textSecondary)
-            }
-
-            HStack(spacing: 16) {
-                if goal.repetition != .none {
-                    Label(goal.repetition.displayName, systemImage: goal.repetition.systemImage)
-                        .font(.subheadline)
-                        .foregroundStyle(.textSecondary)
-                }
-
-                if let deadline = goal.deadline {
-                    Label {
-                        Text(deadline, format: .dateTime)
-                    } icon: {
-                        Image(systemName: "calendar")
-                    }
-                    .font(.subheadline)
-                    .foregroundStyle(goal.isOverdue ? .destructive : .textSecondary)
-                }
-
-                if goal.currentStreak > 0 {
-                    Label {
-                        Text("\(goal.currentStreak) " + String(localized: "detail.streak.days", defaultValue: "days"))
-                    } icon: {
-                        Image(systemName: "flame.fill")
-                    }
-                    .font(.subheadline)
-                    .foregroundStyle(.accentOcean)
-                }
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    // MARK: - Progress
-
-    private func progressSection(progress: Double) -> some View {
-        VStack(spacing: 16) {
-            ZStack {
-                Circle()
-                    .stroke(Color(.systemGray5), lineWidth: 10)
-
-                Circle()
-                    .trim(from: 0, to: progress)
-                    .stroke(Color.accentOcean, style: StrokeStyle(lineWidth: 10, lineCap: .round))
-                    .rotationEffect(.degrees(-90))
-                    .animation(.spring(duration: 0.6), value: progress)
-
-                VStack(spacing: 2) {
-                    Text("\(Int(progress * 100))%")
-                        .font(.system(.title, design: .rounded, weight: .bold))
-                        .foregroundStyle(.textPrimary)
-                        .contentTransition(.numericText())
-
-                    Text(String(localized: "detail.progress", defaultValue: "Progress"))
-                        .font(.caption)
-                        .foregroundStyle(.textSecondary)
-                }
-            }
-            .frame(width: 120, height: 120)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 8)
-    }
-
-    // MARK: - Steps
-
-    private func stepsSection(sortedSteps: [GoalStep]) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(String(localized: "detail.steps", defaultValue: "Steps"))
-                .font(.headline)
-                .foregroundStyle(.textPrimary)
-
-            if sortedSteps.isEmpty {
-                Text(String(localized: "detail.steps.empty", defaultValue: "No steps defined."))
-                    .font(.subheadline)
-                    .foregroundStyle(.textTertiary)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.vertical, 20)
-            } else {
-                VStack(spacing: 0) {
-                    ForEach(Array(sortedSteps.enumerated()), id: \.element.id) { index, step in
-                        StepRowView(step: step) {
-                            withAnimation(.spring(duration: 0.3)) {
-                                viewModel.toggleStep(step)
-                            }
-                        }
-
-                        if index < sortedSteps.count - 1 {
-                            Divider()
-                                .padding(.leading, 44)
-                        }
-                    }
-                }
-                .background(Color.backgroundSecondary)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-            }
-        }
-    }
-
-    // MARK: - Sub-goals
-
-    private func subGoalsSection(sortedSubGoals: [Goal]) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text(String(localized: "detail.subgoals", defaultValue: "Sub-goals"))
-                    .font(.headline)
-                    .foregroundStyle(.textPrimary)
-                
-                Spacer()
-                
-                Button {
-                    showingAddSubGoal = true
-                } label: {
-                    Image(systemName: "plus.circle")
-                        .font(.body)
-                        .foregroundStyle(.accentOcean)
-                }
-            }
-
-            if sortedSubGoals.isEmpty {
-                Text(String(localized: "detail.subgoals.empty", defaultValue: "No sub-goals defined."))
-                    .font(.subheadline)
-                    .foregroundStyle(.textTertiary)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.vertical, 20)
-            } else {
-                VStack(spacing: 0) {
-                    ForEach(Array(sortedSubGoals.enumerated()), id: \.element.id) { index, subGoal in
-                        NavigationLink(value: subGoal) {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    HStack(spacing: 6) {
-                                        if let category = subGoal.category {
-                                            Text(category.emoji)
-                                        }
-                                        Text(subGoal.title)
-                                            .font(.subheadline.weight(.medium))
-                                            .foregroundStyle(.textPrimary)
-                                    }
-
-                                    HStack(spacing: 8) {
-                                        Text(subGoal.priority.displayName)
-                                            .font(.caption2.weight(.semibold))
-                                            .foregroundStyle(subGoal.priority.color)
-                                        
-                                        if let deadline = subGoal.deadline {
-                                            Text("•")
-                                                .font(.caption2)
-                                                .foregroundStyle(.textTertiary)
-                                            Text(deadline, format: .dateTime.day().month())
-                                                .font(.caption2)
-                                                .foregroundStyle(.textSecondary)
-                                        }
-                                    }
-                                }
-
-                                Spacer()
-
-                                Text("\(Int(subGoal.progress * 100))%")
-                                    .font(.caption.weight(.semibold))
-                                    .foregroundStyle(.textSecondary)
-                                
-                                Image(systemName: "chevron.right")
-                                    .font(.caption2)
-                                    .foregroundStyle(Color(.systemGray3))
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 12)
-                            .contentShape(Rectangle())
-                        }
-                        .buttonStyle(.plain)
-
-                        if index < sortedSubGoals.count - 1 {
-                            Divider()
-                                .padding(.leading, 16)
-                        }
-                    }
-                }
-                .background(Color.backgroundSecondary)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-            }
-        }
-    }
-
-    // MARK: - Daily Completion
-
-    private var dailyCompletionSection: some View {
-        VStack(spacing: 12) {
-            if goal.isCompletedToday {
-                HStack {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.accentOcean)
-                    Text(String(localized: "detail.completed.today", defaultValue: "Completed today"))
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.accentOcean)
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.accentOceanLight)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-
-                Button {
-                    withAnimation {
-                        viewModel.unmarkCompletedToday(goal)
-                    }
-                } label: {
-                    Text(String(localized: "detail.undo", defaultValue: "Undo"))
-                        .font(.subheadline)
-                }
-                .tint(.textSecondary)
-            } else {
-                Button {
-                    withAnimation(.spring(duration: 0.4)) {
-                        viewModel.markCompletedToday(goal)
-                    }
-                } label: {
-                    Label(
-                        String(localized: "detail.markdone", defaultValue: "Mark as done today"),
-                        systemImage: "checkmark.circle"
-                    )
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.accentOcean)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-            }
-        }
+    private func addStep() {
+        guard !newStepTitle.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+        let step = GoalStep(title: newStepTitle, isCompleted: false, order: goal.steps.count)
+        goal.steps.append(step)
+        newStepTitle = ""
     }
 }
 
@@ -370,8 +183,7 @@ struct GoalDetailView: View {
             let goal = Goal(title: "Learn SwiftUI", goalDescription: "Master the fundamentals of SwiftUI framework", repetition: .daily)
             goal.steps = [
                 GoalStep(title: "Read official docs", isCompleted: true, order: 0),
-                GoalStep(title: "Build a sample project", isCompleted: false, order: 1),
-                GoalStep(title: "Write unit tests", isCompleted: false, order: 2)
+                GoalStep(title: "Build a sample project", isCompleted: false, order: 1)
             ]
             return goal
         }())
