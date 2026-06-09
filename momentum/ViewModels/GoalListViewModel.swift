@@ -4,16 +4,11 @@ import UIKit
 @Observable
 final class GoalListViewModel {
     var selectedFilter: GoalStatus = .active
-    var selectedCategoryFilter: GoalCategory? = nil
     var searchText: String = ""
 
     func filteredGoals(from goals: [Goal]) -> [Goal] {
         // Main list only displays top-level goals (parent == nil)
         var result = goals.filter { $0.status == selectedFilter && $0.parent == nil }
-
-        if let selectedCategoryFilter {
-            result = result.filter { $0.category == selectedCategoryFilter }
-        }
 
         if !searchText.isEmpty {
             result = result.filter {
