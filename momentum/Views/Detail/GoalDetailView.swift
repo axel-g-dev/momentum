@@ -64,20 +64,20 @@ struct GoalDetailView: View {
                 ), displayedComponents: .date)
                 
                 Picker("Priorité", selection: $goal.priorityRaw) {
-                    ForEach(GoalPriority.allCases) { prio in
+                    ForEach(GoalPriority.allCases, id: \.self) { prio in
                         Text(prio.displayName).tag(prio.rawValue as String?)
                     }
                 }
                 
                 Picker("Répétition", selection: $goal.repetitionRaw) {
-                    ForEach(GoalRepetition.allCases) { rep in
+                    ForEach(GoalRepetition.allCases, id: \.self) { rep in
                         Text(rep.displayName).tag(rep.rawValue)
                     }
                 }
                 
                 Picker("Catégorie", selection: $goal.categoryRaw) {
                     Text("Aucune").tag(nil as String?)
-                    ForEach(GoalCategory.allCases) { cat in
+                    ForEach(GoalCategory.allCases, id: \.self) { cat in
                         Text("\(cat.emoji) \(cat.displayName)").tag(cat.rawValue as String?)
                     }
                 }
