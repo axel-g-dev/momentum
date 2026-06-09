@@ -7,8 +7,8 @@ final class GoalListViewModel {
     var searchText: String = ""
 
     func filteredGoals(from goals: [Goal]) -> [Goal] {
-        // Main list only displays top-level goals (parent == nil)
-        var result = goals.filter { $0.status == selectedFilter && $0.parent == nil }
+        // Main list displays all goals
+        var result = goals.filter { $0.status == selectedFilter }
 
         if !searchText.isEmpty {
             result = result.filter {
@@ -56,40 +56,11 @@ final class GoalListViewModel {
             step.isCompleted = true
         }
 
-        // Cascade to sub-goals
-        for subGoal in goal.subGoals {
-            markSubGoalsCompleted(subGoal)
-        }
-
         if goal.repetition == .none {
             goal.status = .completed
-        }
-
-        // Propagate upward to parent
-        if let parent = goal.parent {
-            checkAndPropagateCompletion(for: parent)
         }
         
         HapticManager.shared.notification(type: .success)
-    }
-
-    private func markSubGoalsCompleted(_ goal: Goal) {
-        if !goal.isCompletedToday {
-            let entry = GoalHistory(date: .now, completed: true)
-            goal.history.append(entry)
-        }
-        
-        for step in goal.steps {
-            step.isCompleted = true
-        }
-
-        for subGoal in goal.subGoals {
-            markSubGoalsCompleted(subGoal)
-        }
-
-        if goal.repetition == .none {
-            goal.status = .completed
-        }
     }
 
     func unmarkCompletedToday(_ goal: Goal) {
@@ -102,33 +73,12 @@ final class GoalListViewModel {
             goal.status = .active
         }
 
-        // Propagate uncompletion upward to parents
-        if let parent = goal.parent {
-            propagateUncompletion(for: parent)
-        }
-
         HapticManager.shared.impact(style: .light)
     }
 
-    private func propagateUncompletion(for goal: Goal) {
-        if goal.status == .completed {
-            goal.status = .active
-        }
-        let today = Calendar.current.startOfDay(for: .now)
-        goal.history.removeAll {
-            Calendar.current.isDate($0.date, inSameDayAs: today)
-        }
-
-        if let parent = goal.parent {
-            propagateUncompletion(for: parent)
-        }
-    }
-
-    func checkAndPropagateCompletion(for goal: Goal) {
+    func checkGoalCompletion(_ goal: Goal) {
         let allStepsDone = goal.steps.allSatisfy { $0.isCompleted }
-        let allSubGoalsDone = goal.subGoals.allSatisfy { $0.status == .completed || $0.isCompletedToday }
-
-        if allStepsDone && allSubGoalsDone {
+        if allStepsDone && !goal.steps.isEmpty {
             if !goal.isCompletedToday {
                 let entry = GoalHistory(date: .now, completed: true)
                 goal.history.append(entry)
@@ -137,10 +87,16 @@ final class GoalListViewModel {
             if goal.repetition == .none {
                 goal.status = .completed
             }
+        }
+    }
 
-            if let parent = goal.parent {
-                checkAndPropagateCompletion(for: parent)
-            }
+    func checkGoalUncompletion(_ goal: Goal) {
+        if goal.status == .completed {
+            goal.status = .active
+        }
+        let today = Calendar.current.startOfDay(for: .now)
+        goal.history.removeAll {
+            Calendar.current.isDate($0.date, inSameDayAs: today)
         }
     }
 }
