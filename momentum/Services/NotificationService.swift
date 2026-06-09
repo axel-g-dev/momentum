@@ -70,10 +70,10 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
             let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
             let request = UNNotificationRequest(identifier: "daily_reminder", content: content, trigger: trigger)
 
-            center.add(request) { error in
-                if let error {
-                    print("Failed to schedule notification: \(error)")
-                }
+            do {
+                try await center.add(request)
+            } catch {
+                print("Failed to schedule notification: \(error)")
             }
         }
     }
@@ -145,10 +145,10 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
 
             let request = UNNotificationRequest(identifier: "goal_reminder_\(identifier)", content: content, trigger: trigger)
 
-            center.add(request) { error in
-                if let error {
-                    print("Failed to schedule goal reminder: \(error)")
-                }
+            do {
+                try await center.add(request)
+            } catch {
+                print("Failed to schedule goal reminder: \(error)")
             }
         }
     }
