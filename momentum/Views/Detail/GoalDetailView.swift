@@ -122,7 +122,7 @@ struct GoalDetailView: View {
                         NavigationLink(value: subGoal) {
                             HStack {
                                 Image(systemName: subGoal.status == .completed ? "checkmark.circle.fill" : "circle")
-                                    .foregroundStyle(subGoal.status == .completed ? .accentOcean : .tertiary)
+                                    .foregroundStyle(subGoal.status == .completed ? Color.accentOcean : Color(uiColor: .tertiaryLabel))
                                 Text(subGoal.title)
                                     .strikethrough(subGoal.status == .completed)
                                     .foregroundStyle(subGoal.status == .completed ? .secondary : .primary)
