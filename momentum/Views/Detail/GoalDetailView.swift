@@ -22,13 +22,15 @@ struct GoalDetailView: View {
         
         return ScrollView {
             VStack(spacing: 24) {
+                // Big Done Button (always visible for active goals)
+                if goal.status == .active {
+                    doneSection
+                }
+                
                 headerSection
                 progressSection(progress: progress)
                 stepsSection(sortedSteps: sortedSteps)
                 subGoalsSection(sortedSubGoals: sortedSubGoals)
-                if goal.repetition != .none {
-                    dailyCompletionSection
-                }
             }
             .padding()
         }
@@ -104,29 +106,64 @@ struct GoalDetailView: View {
         }
     }
 
+    // MARK: - Done Section (Big button)
+
+    private var doneSection: some View {
+        VStack(spacing: 12) {
+            if goal.isCompletedToday {
+                HStack {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.title2)
+                    Text(String(localized: "detail.completed.today", defaultValue: "Completed today"))
+                        .font(.headline)
+                }
+                .foregroundStyle(.accentOcean)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.accentOceanLight)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                
+                Button {
+                    withAnimation {
+                        viewModel.unmarkCompletedToday(goal)
+                    }
+                } label: {
+                    Text(String(localized: "detail.undo", defaultValue: "Undo"))
+                        .font(.subheadline)
+                }
+                .tint(.textSecondary)
+            } else {
+                Button {
+                    withAnimation(.spring(duration: 0.4)) {
+                        viewModel.markCompletedToday(goal)
+                    }
+                } label: {
+                    Label(
+                        String(localized: "detail.markdone", defaultValue: "Mark as done today"),
+                        systemImage: "checkmark.circle"
+                    )
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.accentOcean)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+            }
+        }
+    }
+
     // MARK: - Header
 
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Category & Priority badges
-            HStack(spacing: 8) {
-                if let category = goal.category {
-                    Label(category.displayName, systemImage: category.iconName)
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(category.color)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 5)
-                        .background(category.color.opacity(0.12), in: Capsule())
-                }
-                
-                Label(goal.priority.displayName, systemImage: goal.priority.iconName)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(goal.priority.color)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .background(goal.priority.color.opacity(0.12), in: Capsule())
-            }
-            .padding(.bottom, 4)
+            // Priority badge only
+            Label(goal.priority.displayName, systemImage: goal.priority.iconName)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(goal.priority.color)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+                .background(goal.priority.color.opacity(0.12), in: Capsule())
 
             if !goal.goalDescription.isEmpty {
                 Text(goal.goalDescription)
@@ -165,7 +202,7 @@ struct GoalDetailView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // MARK: - Progress
+    // MARK: - Progress (Circle)
 
     private func progressSection(progress: Double) -> some View {
         VStack(spacing: 16) {
@@ -263,14 +300,9 @@ struct GoalDetailView: View {
                         NavigationLink(value: subGoal) {
                             HStack {
                                 VStack(alignment: .leading, spacing: 4) {
-                                    HStack(spacing: 6) {
-                                        if let category = subGoal.category {
-                                            Text(category.emoji)
-                                        }
-                                        Text(subGoal.title)
-                                            .font(.subheadline.weight(.medium))
-                                            .foregroundStyle(.textPrimary)
-                                    }
+                                    Text(subGoal.title)
+                                        .font(.subheadline.weight(.medium))
+                                        .foregroundStyle(.textPrimary)
 
                                     HStack(spacing: 8) {
                                         Text(subGoal.priority.displayName)
@@ -311,53 +343,6 @@ struct GoalDetailView: View {
                     }
                 }
                 .background(Color.backgroundSecondary)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-            }
-        }
-    }
-
-    // MARK: - Daily Completion
-
-    private var dailyCompletionSection: some View {
-        VStack(spacing: 12) {
-            if goal.isCompletedToday {
-                HStack {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.accentOcean)
-                    Text(String(localized: "detail.completed.today", defaultValue: "Completed today"))
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.accentOcean)
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.accentOceanLight)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-
-                Button {
-                    withAnimation {
-                        viewModel.unmarkCompletedToday(goal)
-                    }
-                } label: {
-                    Text(String(localized: "detail.undo", defaultValue: "Undo"))
-                        .font(.subheadline)
-                }
-                .tint(.textSecondary)
-            } else {
-                Button {
-                    withAnimation(.spring(duration: 0.4)) {
-                        viewModel.markCompletedToday(goal)
-                    }
-                } label: {
-                    Label(
-                        String(localized: "detail.markdone", defaultValue: "Mark as done today"),
-                        systemImage: "checkmark.circle"
-                    )
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.accentOcean)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             }
         }
