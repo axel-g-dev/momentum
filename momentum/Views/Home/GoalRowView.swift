@@ -74,7 +74,6 @@ struct GoalRowView: View {
                 streakBadge
             }
         }
-        .padding(.vertical, 6)
     }
 
     // MARK: - Components
