@@ -35,11 +35,25 @@ final class GoalFormViewModel {
         title = goal.title
         goalDescription = goal.goalDescription
         hasDeadline = goal.deadline != nil
-        hasDeadlineTime = true
-        deadline = goal.deadline ?? Calendar.current.date(byAdding: .weekOfYear, value: 1, to: .now) ?? .now
+        if let deadline = goal.deadline {
+            let comps = Calendar.current.dateComponents([.hour, .minute], from: deadline)
+            hasDeadlineTime = !(comps.hour == 23 && comps.minute == 59)
+            self.deadline = deadline
+        } else {
+            hasDeadlineTime = false
+            deadline = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: .now) ?? .now
+        }
+        
         hasReminder = goal.reminderDate != nil
-        hasReminderTime = true
-        reminderDate = goal.reminderDate ?? Calendar.current.date(byAdding: .day, value: 1, to: .now) ?? .now
+        if let reminderDate = goal.reminderDate {
+            let comps = Calendar.current.dateComponents([.hour, .minute], from: reminderDate)
+            hasReminderTime = !(comps.hour == 9 && comps.minute == 0)
+            self.reminderDate = reminderDate
+        } else {
+            hasReminderTime = false
+            reminderDate = Calendar.current.date(byAdding: .day, value: 1, to: .now) ?? .now
+        }
+        
         repetition = goal.repetition
         priority = goal.priority
         parentGoal = goal.parent
