@@ -11,7 +11,6 @@ struct HomeView: View {
     var body: some View {
         VStack(spacing: 0) {
             filterPicker
-            categoryPillsFilter
             goalList
         }
         .navigationTitle(String(localized: "home.title", defaultValue: "my goals")) // lowercase per preferences
@@ -47,52 +46,6 @@ struct HomeView: View {
         .pickerStyle(.segmented)
         .padding(.horizontal)
         .padding(.vertical, 8)
-    }
-
-    // MARK: - Category Pills Filter
-
-    private var categoryPillsFilter: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                // "All" pill
-                Button {
-                    withAnimation(.spring(duration: 0.25)) {
-                        viewModel.selectedCategoryFilter = nil
-                    }
-                } label: {
-                    Text(String(localized: "category.all", defaultValue: "All"))
-                        .font(.subheadline.weight(.medium))
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(viewModel.selectedCategoryFilter == nil ? Color.accentOcean : Color.backgroundSecondary)
-                        .foregroundStyle(viewModel.selectedCategoryFilter == nil ? .white : .textPrimary)
-                        .clipShape(Capsule())
-                }
-                .buttonStyle(.plain)
-                
-                ForEach(GoalCategory.allCases) { category in
-                    Button {
-                        withAnimation(.spring(duration: 0.25)) {
-                            viewModel.selectedCategoryFilter = category
-                        }
-                    } label: {
-                        HStack(spacing: 4) {
-                            Text(category.emoji)
-                            Text(category.displayName)
-                        }
-                        .font(.subheadline.weight(.medium))
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(viewModel.selectedCategoryFilter == category ? category.color : Color.backgroundSecondary)
-                        .foregroundStyle(viewModel.selectedCategoryFilter == category ? .white : .textPrimary)
-                        .clipShape(Capsule())
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-            .padding(.horizontal)
-            .padding(.bottom, 8)
-        }
     }
 
     // MARK: - Goal List
@@ -212,8 +165,6 @@ struct HomeView: View {
                                 } label: {
                                     VStack(alignment: .leading, spacing: 8) {
                                         HStack {
-                                            Text(template.category.emoji)
-                                                .font(.title3)
                                             Spacer()
                                             Text(template.priority.displayName)
                                                 .font(.caption2.weight(.bold))
