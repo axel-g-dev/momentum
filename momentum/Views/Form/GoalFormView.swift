@@ -98,26 +98,10 @@ struct GoalFormView: View {
         }
     }
 
-    // MARK: - Categorization & Priority
+    // MARK: - Priority
 
     private var categorizationSection: some View {
         Section {
-            Picker(
-                String(localized: "form.category", defaultValue: "Category"),
-                selection: $viewModel.category
-            ) {
-                Text(String(localized: "form.category.none", defaultValue: "None")).tag(nil as GoalCategory?)
-                ForEach(GoalCategory.allCases) { cat in
-                    HStack {
-                        Text(cat.emoji)
-                            .padding(.trailing, 4)
-                        Text(cat.displayName)
-                    }
-                    .tag(cat as GoalCategory?)
-                }
-            }
-            .tint(.accentOcean)
-            
             VStack(alignment: .leading, spacing: 8) {
                 Text(String(localized: "form.priority", defaultValue: "Priority"))
                     .font(.subheadline)
