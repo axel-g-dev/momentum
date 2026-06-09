@@ -22,19 +22,24 @@ struct GoalDetailView: View {
         
         return ScrollView {
             VStack(spacing: 24) {
-                // Big Done Button (always visible for active goals)
-                if goal.status == .active {
-                    doneSection
-                }
-                
                 headerSection
                 progressSection(progress: progress)
                 stepsSection(sortedSteps: sortedSteps)
                 subGoalsSection(sortedSubGoals: sortedSubGoals)
             }
             .padding()
+            // Bottom padding so content isn't hidden behind the Done button
+            .padding(.bottom, goal.status == .active ? 80 : 0)
         }
         .background(Color.backgroundPrimary)
+        .safeAreaInset(edge: .bottom) {
+            if goal.status == .active {
+                doneSection
+                    .padding(.horizontal)
+                    .padding(.vertical, 12)
+                    .background(.regularMaterial)
+            }
+        }
         .navigationTitle(goal.title)
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
