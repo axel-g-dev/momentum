@@ -8,12 +8,10 @@ struct GoalFormView: View {
     @FocusState private var focusedStepIndex: Int?
 
     let editingGoal: Goal?
-    let parentGoal: Goal?
     let initialTemplate: GoalTemplate?
 
-    init(editingGoal: Goal? = nil, parentGoal: Goal? = nil, initialTemplate: GoalTemplate? = nil) {
+    init(editingGoal: Goal? = nil, initialTemplate: GoalTemplate? = nil) {
         self.editingGoal = editingGoal
-        self.parentGoal = parentGoal
         self.initialTemplate = initialTemplate
     }
 
@@ -28,18 +26,7 @@ struct GoalFormView: View {
     var body: some View {
         NavigationStack {
             Form {
-                if let parentGoal {
-                    Section {
-                        HStack {
-                            Text(String(localized: "form.parentGoal", defaultValue: "Sub-goal of"))
-                                .foregroundStyle(.textSecondary)
-                            Spacer()
-                            Text(parentGoal.title)
-                                .fontWeight(.medium)
-                                .foregroundStyle(.accentOcean)
-                        }
-                    }
-                }
+
                 basicInfoSection
                 categorizationSection
                 deadlineSection
@@ -71,9 +58,7 @@ struct GoalFormView: View {
                     viewModel.loadTemplate(initialTemplate)
                 }
                 
-                if let parentGoal {
-                    viewModel.parentGoal = parentGoal
-                }
+
             }
         }
     }
