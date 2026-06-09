@@ -12,14 +12,16 @@ struct GoalRowView: View {
             } label: {
                 if goal.isCompletedToday || goal.status == .completed {
                     Image(systemName: "checkmark.circle.fill")
-                        .font(.title2)
+                        .font(.system(size: 24, weight: .regular))
                         .foregroundStyle(.accentOcean)
+                        .frame(width: 24, height: 24)
                 } else if !goal.steps.isEmpty || !goal.subGoals.isEmpty {
                     circularProgress(progress: goal.progress)
                 } else {
                     Image(systemName: "circle")
-                        .font(.title2)
+                        .font(.system(size: 24, weight: .regular))
                         .foregroundStyle(Color(.systemGray4))
+                        .frame(width: 24, height: 24)
                 }
             }
             .buttonStyle(.plain)
@@ -87,13 +89,14 @@ struct GoalRowView: View {
     private func circularProgress(progress: Double) -> some View {
         ZStack {
             Circle()
-                .stroke(Color(.systemGray5), lineWidth: 2.5)
+                .stroke(Color(.systemGray5), lineWidth: 2)
             Circle()
                 .trim(from: 0, to: progress)
-                .stroke(Color.accentOcean, style: StrokeStyle(lineWidth: 2.5, lineCap: .round))
+                .stroke(Color.accentOcean, style: StrokeStyle(lineWidth: 2, lineCap: .round))
                 .rotationEffect(.degrees(-90))
         }
-        .frame(width: 26, height: 26)
+        .frame(width: 22, height: 22)
+        .padding(1)
     }
 }
 
