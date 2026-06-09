@@ -23,13 +23,15 @@ struct GoalDetailView: View {
         return ScrollView {
             VStack(spacing: 24) {
                 headerSection
-                progressSection(progress: progress)
-                stepsSection(sortedSteps: sortedSteps)
+                if !goal.steps.isEmpty || !goal.subGoals.isEmpty {
+                    progressSection(progress: progress)
+                }
+                if !goal.steps.isEmpty {
+                    stepsSection(sortedSteps: sortedSteps)
+                }
                 subGoalsSection(sortedSubGoals: sortedSubGoals)
             }
             .padding()
-            // Bottom padding so content isn't hidden behind the Done button
-            .padding(.bottom, goal.status == .active ? 80 : 0)
         }
         .background(Color.backgroundPrimary)
         .safeAreaInset(edge: .bottom) {
@@ -37,6 +39,7 @@ struct GoalDetailView: View {
                 doneSection
                     .padding(.horizontal)
                     .padding(.vertical, 12)
+                    .frame(maxWidth: .infinity)
                     .background(.regularMaterial)
             }
         }
