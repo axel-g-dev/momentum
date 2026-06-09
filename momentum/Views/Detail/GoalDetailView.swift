@@ -36,14 +36,10 @@ struct GoalDetailView: View {
         .background(Color.backgroundPrimary)
         .safeAreaInset(edge: .bottom) {
             if goal.status == .active {
-                VStack(spacing: 0) {
-                    Divider()
-                    doneSection
-                        .padding(.horizontal)
-                        .padding(.vertical, 12)
-                }
-                .frame(maxWidth: .infinity)
-                .background(.regularMaterial)
+                doneSection
+                    .padding(.horizontal)
+                    .padding(.vertical, 12)
+                    .frame(maxWidth: .infinity)
             }
         }
         .navigationTitle(goal.title)
